@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="container mt-4 mb-5 " dir="rtl">
+  <form [formGroup]="form" (ngSubmit)="updateNews()">
+    <div class="mb-3">
+      <input formControlName="title" class="form-control" placeholder="عنوان الخبر" />
+    </div>
+    <div class="mb-3">
+      <textarea formControlName="content" class="form-control" rows="5" placeholder="محتوى الخبر"></textarea>
+    </div>
+    <div class="mb-3">
+      <img [src]="form.get('imageUrl')?.value" class="img-fluid mb-2" style="max-height: 200px;">
+      <input formControlName="imageUrl" class="form-control" placeholder="رابط الصورة" />
+    </div>
+    <button class="btn btn-danger">حفظ التعديلات</button>
+  </form>
+</div>
+
+  </div>
+  <div class="col-md-3">
+    <div class="container mt-4 mb-5">
+      <app-ad-sidebar></app-ad-sidebar>
+    </div>
+  </div>
+</div>

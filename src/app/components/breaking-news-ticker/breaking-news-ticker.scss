@@ -1,0 +1,26 @@
+.news-ticker-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  direction: rtl;
+  position: relative;
+}
+
+.news-ticker-text {
+  display: flex;
+  width: max-content;
+  animation: tickerScroll 15s linear infinite 3s;
+}
+
+.ticker-content {
+  display: inline-block;
+  padding-inline-end: 200px;
+}
+
+@keyframes tickerScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

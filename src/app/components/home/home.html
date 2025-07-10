@@ -1,0 +1,24 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="card mb-3" *ngFor="let news of newsList">
+        <div class="card-body bg-light">
+          <div class="d-flex">
+            <img [src]="news.imageUrl" class="me-3" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px;">
+            <div>
+              <h5>
+                <a [routerLink]="['/news', news.id]" class="text-danger">{{ news.title }}</a>
+              </h5>
+              <p>{{ news.content }}</p>
+              <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-danger mt-2">تعديل</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <app-ad-sidebar></app-ad-sidebar>
+    </div>
+  </div>
+</div>
