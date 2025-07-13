@@ -1,0 +1,10 @@
+    <div class="container mt-4">
+      <h3>تعديل القسم</h3>
+      <form [formGroup]="form" (ngSubmit)="updateSection()">
+        <div class="mb-3">
+          <label class="form-label">اسم القسم</label>
+          <input formControlName="name" class="form-control" placeholder="اسم القسم">
+        </div>
+        <button type="submit" class="btn btn-primary mb-5">💾 حفظ التعديلات</button>
+      </form>
+    </div>

@@ -1,0 +1,16 @@
+<div class="register-container">
+  <h2>Register New Admin</h2>
+  <form (ngSubmit)="register()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" [(ngModel)]="email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" [(ngModel)]="password" required>
+    </div>
+    <div class="form-group d-flex justify-content-center">
+      <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+  </form>
+</div>

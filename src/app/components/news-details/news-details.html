@@ -1,17 +1,22 @@
 <div class="row">
   <div class="col-md-9">
     <div class="container mt-4 mb-5" dir="rtl" *ngIf="news">
-  <div class="card bg-light">
-    <div class="card-body text-center">
-      <img [src]="news.imageUrl" class="img-fluid mb-3" alt="{{ news.title }}" style="max-height: 400px;">
-      <h3 class="text-danger">{{ news.title }}</h3>
-      <p>{{ news.content }}</p>
-    </div>
+        <div *ngIf="news.isImportant" class="alert alert-danger fw-bold">
+    🔥 هذا الخبر ضمن الأخبار العاجلة
   </div>
-</div>
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <img [src]="getFullImageUrl(news.imageUrl)" class="img-fluid mb-3"
+               alt="{{ news.title }}" style="max-height: 400px;">
+          <h3 class="text-danger">{{ news.title }}</h3>
+          <p>{{ news.content }}</p>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="col-md-3">
     <div class="container mt-4 mb-5">
       <app-ad-sidebar></app-ad-sidebar>
     </div>
+  </div>
 </div>

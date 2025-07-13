@@ -16,6 +16,16 @@
   padding-inline-end: 200px;
 }
 
+.add-breaking-news {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 @keyframes tickerScroll {
   0% {
     transform: translateX(0%);

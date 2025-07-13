@@ -1,8 +1,9 @@
-<div class="news-ticker-wrapper bg-danger text-white py-2 px-3" dir="rtl">
+<div class="news-ticker-wrapper bg-danger text-white py-2 px-3" dir="rtl" *ngIf="newsList.length > 0">
   <div class="news-ticker-text">
     <div class="ticker-content" *ngFor="let repeat of [1,2]">
-      <span *ngFor="let title of newsTitles; let i = index">
-        🔥 {{ title }} <span *ngIf="i !== newsTitles.length - 1"> | </span>
+      <span *ngFor="let news of newsList; let i = index">
+        🔥 {{ news.title }}: {{ news.content }}
+        <span *ngIf="i !== newsList.length - 1"> | </span>
       </span>
     </div>
   </div>

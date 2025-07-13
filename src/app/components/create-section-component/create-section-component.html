@@ -1,0 +1,10 @@
+  <div class="container mt-4">
+      <h3>إضافة قسم جديد</h3>
+      <form [formGroup]="form" (ngSubmit)="createSection()">
+        <div class="mb-3">
+          <label class="form-label">اسم القسم</label>
+          <input formControlName="name" class="form-control" placeholder="اسم القسم">
+        </div>
+        <button type="submit" class="btn btn-success mb-5">➕ إضافة</button>
+      </form>
+    </div>

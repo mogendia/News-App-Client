@@ -1,16 +1,23 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-md-9">
+
+      <div class="d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
+        <a [routerLink]="['/edit/new']" class="btn btn-primary">Add News</a>
+      </div>
+
+
       <div class="card mb-3" *ngFor="let news of newsList">
         <div class="card-body bg-light">
           <div class="d-flex">
-            <img [src]="news.imageUrl" class="me-3" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px;">
+           <img [src]="getFullImageUrl(news.imageUrl)" class="me-3" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px; object-fit: cover;" (error)="onImageError($event)">
             <div>
               <h5>
                 <a [routerLink]="['/news', news.id]" class="text-danger">{{ news.title }}</a>
               </h5>
               <p>{{ news.content }}</p>
-              <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-danger mt-2">تعديل</a>
+              <a *ngIf="authService.isAdmin()" [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-danger mt-2 ms-2">تعديل</a>
+              <button *ngIf="authService.isAdmin()" (click)="deleteNews(news.id)" class="btn btn-sm btn-danger mt-2 ms-2">حذف</button>
             </div>
           </div>
         </div>

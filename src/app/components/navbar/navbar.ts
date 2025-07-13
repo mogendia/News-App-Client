@@ -1,26 +1,89 @@
-import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { AuthService } from './../../services/auth.service';
+import { Component, AfterViewInit, inject } from '@angular/core';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { SectionService } from '../../services/section-service';
+import { filter } from 'rxjs';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
 export class NavbarComponent implements AfterViewInit {
-  sections = ['قسم زايد1', 'قسم زايد2', 'جهاز المدينة', 'شركة المياه', 'شركة الكهرباء', 'البريد'];
+  public authService = inject(AuthService);
+  public router = inject(Router);
+  public sectionService = inject(SectionService);
 
+
+  searchTerm: string = '';
+
+  sectionList: any[] = [];
+
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.loadSections();
+    });
+  }
+
+ ngOnInit() {
+    this.loadSections();
+  }
+
+  loadSections(): void {
+    this.sectionService.getSections().subscribe({
+      next: (sections) => {
+        this.sectionList = sections;
+      },
+      error: (err) => {
+        console.error('فشل تحميل الأقسام:', err);
+      }
+    });
+  }
   ngAfterViewInit() {
-    // Initialize all dropdowns manually
     const dropdownElementList = document.querySelectorAll('.dropdown-toggle');
     if (typeof bootstrap !== 'undefined') {
-      const dropdownList = [...dropdownElementList].map(dropdownToggleEl => new bootstrap.Dropdown(dropdownToggleEl));
-      console.log('Dropdowns initialized:', dropdownList.length);
-    } else {
-      console.error('Bootstrap JS is not loaded!');
+      [...dropdownElementList].map(dropdownToggleEl => new bootstrap.Dropdown(dropdownToggleEl));
     }
   }
+  searchNews() {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/search'], { queryParams: { query: this.searchTerm } });
+    }
+  }
+goToSection(id: number): void {
+    this.router.navigate(['/sections', id]);
+  }
+
+  editSection(id: number): void {
+    this.router.navigate(['/sections/edit', id]);
+  }
+
+  deleteSection(id: number): void {
+    if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
+      this.sectionService.deleteSection(id).subscribe({
+        next: () => {
+          this.loadSections(); // Reload sections after deletion
+        },
+        error: (err) => {
+          console.error('فشل حذف القسم:', err);
+          alert('حدث خطأ أثناء حذف القسم.');
+        }
+      });
+    }
+  }
+
+  goToAddSection(): void {
+    this.router.navigate(['/sections/create']);
+  }
 }
+
+
+

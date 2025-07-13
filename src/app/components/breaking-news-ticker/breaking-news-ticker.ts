@@ -1,21 +1,24 @@
+import { BreakingNewsService } from './../../services/breaking-news.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { NewsService } from '../../services/News.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { AuthService } from './../../services/auth.service';
 
 @Component({
-  selector: 'app-breaking-news-ticker',
+ selector: 'app-breaking-news-ticker',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './breaking-news-ticker.html',
   styleUrl: './breaking-news-ticker.scss'
 })
 export class BreakingNewsTickerComponent implements OnInit {
-  newsTitles: string[] = [];
+  newsList: any[] = [];
+  authService = inject(AuthService);
 
-  constructor(private newsService: NewsService) {}
+  constructor(private newsService: BreakingNewsService) {}
 
-  ngOnInit(): void {
-    this.newsService.getNews().subscribe(data => {
-      this.newsTitles = data.map(n => n.title);
-    });
-  }
+ngOnInit(): void {
+  this.newsService.getBreakingNews().subscribe(data => {
+    this.newsList = data; // كل خبر فيه title + content
+  });
+}
 }

@@ -1,22 +1,78 @@
 <div class="row">
   <div class="col-md-9">
-    <div class="container mt-4 mb-5 " dir="rtl">
-  <form [formGroup]="form" (ngSubmit)="updateNews()">
-    <div class="mb-3">
-      <input formControlName="title" class="form-control" placeholder="عنوان الخبر" />
-    </div>
-    <div class="mb-3">
-      <textarea formControlName="content" class="form-control" rows="5" placeholder="محتوى الخبر"></textarea>
-    </div>
-    <div class="mb-3">
-      <img [src]="form.get('imageUrl')?.value" class="img-fluid mb-2" style="max-height: 200px;">
-      <input formControlName="imageUrl" class="form-control" placeholder="رابط الصورة" />
-    </div>
-    <button class="btn btn-danger">حفظ التعديلات</button>
-  </form>
-</div>
+    <div class="container mt-4 mb-5" dir="rtl">
+      <h2>{{ isEditMode ? 'تعديل الخبر' : 'إضافة خبر جديد' }}</h2>
 
+      <form [formGroup]="form" (ngSubmit)="saveNews()">
+
+        <!-- العنوان -->
+        <div class="mb-3">
+          <input formControlName="title" class="form-control" placeholder="عنوان الخبر" />
+        </div>
+
+        <!-- المحتوى -->
+        <div class="mb-3">
+          <textarea formControlName="content" class="form-control" rows="5" placeholder="محتوى الخبر"></textarea>
+        </div>
+
+        <!-- الصورة -->
+        <div class="mb-3">
+          <label class="form-label">صورة الخبر</label>
+
+          <!-- ✅ عرض الصورة القديمة (من السيرفر) -->
+          <div *ngIf="!selectedFile && imagePreview" class="mb-2">
+            <img [src]="imageUrlService.getFullImageUrl(imagePreview)"
+                 (error)="imageUrlService.handleImageError($event)"
+                 class="img-fluid img-preview"
+                 style="max-height: 300px; width: auto; margin: 10px 0; border-radius: 10px;">
+          </div>
+
+          <!-- ✅ معاينة الصورة الجديدة (Base64 preview) -->
+          <div *ngIf="selectedFile && imagePreview" class="mb-2">
+            <img [src]="imagePreview"
+                 class="img-fluid img-preview"
+                 style="max-height: 300px; width: auto; margin: 10px 0; border-radius: 10px;">
+          </div>
+
+          <!-- ✅ اختيار صورة -->
+          <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)" />
+        </div>
+
+        <!-- اختيار القسم -->
+        <div class="mb-3">
+          <label class="form-label">القسم</label>
+          <select class="form-control" formControlName="sectionId">
+            <option [value]="1">منوعات</option>
+            <option [value]="2">اخبار</option>
+            <option [value]="3">اقتصاد</option>
+            <option [value]="4">حوادث </option>
+            <option [value]="5">رياضة</option>
+            <option [value]="6">معمار </option>
+           
+          </select>
+        </div>
+
+        <!-- هل هو خبر عاجل؟ -->
+        <div class="form-check form-switch mb-3 ps-5">
+          <input type="checkbox" class="form-check-input" formControlName="isImportant" id="isImportant"
+                 style="width: 3em; height: 1.5em; margin-left: 15px;">
+          <label class="form-check-label fw-bold fs-5" for="isImportant">عرض في شريط الأخبار العاجلة</label>
+        </div>
+
+        <!-- هل يظهر في الرئيسية؟ -->
+        <div class="form-check form-switch mb-3 ps-5">
+          <input type="checkbox" class="form-check-input" formControlName="isHomePage" id="isHomePage"
+                 style="width: 3em; height: 1.5em; margin-left: 15px;">
+          <label class="form-check-label fw-bold fs-5" for="isHomePage">عرض في الصفحة الرئيسية</label>
+        </div>
+
+        <button type="submit" class="btn btn-danger">
+          {{ isEditMode ? 'حفظ التعديلات' : 'إضافة الخبر' }}
+        </button>
+      </form>
+    </div>
   </div>
+
   <div class="col-md-3">
     <div class="container mt-4 mb-5">
       <app-ad-sidebar></app-ad-sidebar>

@@ -1,35 +1,70 @@
-
 <nav class="navbar">
   <div class="container">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="/">
       <img src="./favicon.ico" alt="Logo" class="logo">
-      <i>الجريدة الأخبــــارية</i>
+      <i class="me-2">البوصلــة</i>
     </a>
 
-     <form class="form-inline mx-auto">
-    <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" />
-          <div class="input-group-append">
-            <button class="btn btn-primary">
-              <i class="material-icons">search</i>
-            </button>
-          </div>
-    </div>
-  </form>
+    <!-- 🔍 نموذج البحث -->
+    <form class="form-inline mx-auto" (ngSubmit)="searchNews()">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="ابحث عن خبر" [(ngModel)]="searchTerm" name="searchTerm">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">
+            <i class="material-icons">search</i>
+          </button>
+        </div>
+      </div>
+    </form>
 
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="dropdown me-3" *ngIf="sectionList.length > 0">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         الأقــســام
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">قسم زايد1</a>
-        <a class="dropdown-item" href="#">قسم زايد2</a>
-        <a class="dropdown-item" href="#">جهاز المدينة</a>
-        <a class="dropdown-item" href="#">شركة المياه</a>
-        <a class="dropdown-item" href="#">شركة الكهرباء</a>
-        <a class="dropdown-item" href="#">البريد</a>
+      <div class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenuButton">
+        <div *ngFor="let section of sectionList"
+             class="d-flex align-items-center px-3 py-2 border-bottom"
+             [ngClass]="authService.isAdmin() ? 'justify-content-between' : 'justify-content-center'">
+          <a class="text-dark text-decoration-none"
+             [ngClass]="authService.isAdmin() ? 'flex-grow-1 text-start' : 'text-center'"
+             [routerLink]="['/sections', section.id]">
+            {{ section.name }}
+          </a>
+
+          <div *ngIf="authService.isAdmin()" class="d-flex">
+            <!-- زر تعديل -->
+            <button class="btn btn-sm btn-outline-primary me-1"
+                    (click)="editSection(section.id)">
+              ✏️
+            </button>
+
+            <!-- زر حذف -->
+            <button class="btn btn-sm btn-outline-danger"
+                    (click)="deleteSection(section.id)">
+              ❌
+            </button>
+          </div>
+        </div>
+
+        <!-- زر إضافة قسم -->
+        <div class="dropdown-divider"></div>
+        <button class="btn btn-sm btn-success w-100" *ngIf="authService.isAdmin()" (click)="goToAddSection()">
+          ➕ إضافة قسم جديد
+        </button>
+      </div>
+    </div>
+
+    <!-- 👤 تسجيل الدخول / الخروج -->
+    <div class="dropdown px-3">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        تسجيل الدخول
+      </button>
+      <div class="dropdown-menu text-center">
+        <button class="btn btn-primary mb-2" *ngIf="!authService.isAdmin()" [routerLink]="['/login']">الدخول</button>
+        <button class="btn btn-primary mb-2" *ngIf="authService.isAdmin()" (click)="authService.logout()">تسجيل الخروج</button>
+        <a class="btn btn-secondary" *ngIf="authService.isAdmin()" [routerLink]="['/register-admin']">انشاء حساب</a>
       </div>
     </div>
   </div>
 </nav>
-
