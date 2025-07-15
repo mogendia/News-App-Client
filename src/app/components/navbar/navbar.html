@@ -5,7 +5,6 @@
       <i class="me-2">البوصلــة</i>
     </a>
 
-    <!-- 🔍 نموذج البحث -->
     <form class="form-inline mx-auto" (ngSubmit)="searchNews()">
       <div class="input-group">
         <input type="text" class="form-control" placeholder="ابحث عن خبر" [(ngModel)]="searchTerm" name="searchTerm">
@@ -16,6 +15,9 @@
         </div>
       </div>
     </form>
+<a *ngIf="!authService.isAdmin()" class="btn btn-danger ms-2" [routerLink]="['/live']">
+  🎬 مشاهدة البث
+</a>
 
     <div class="dropdown me-3" *ngIf="sectionList.length > 0">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
@@ -33,13 +35,11 @@
           </a>
 
           <div *ngIf="authService.isAdmin()" class="d-flex">
-            <!-- زر تعديل -->
             <button class="btn btn-sm btn-outline-primary me-1"
                     (click)="editSection(section.id)">
               ✏️
             </button>
 
-            <!-- زر حذف -->
             <button class="btn btn-sm btn-outline-danger"
                     (click)="deleteSection(section.id)">
               ❌
@@ -47,7 +47,6 @@
           </div>
         </div>
 
-        <!-- زر إضافة قسم -->
         <div class="dropdown-divider"></div>
         <button class="btn btn-sm btn-success w-100" *ngIf="authService.isAdmin()" (click)="goToAddSection()">
           ➕ إضافة قسم جديد
@@ -55,7 +54,6 @@
       </div>
     </div>
 
-    <!-- 👤 تسجيل الدخول / الخروج -->
     <div class="dropdown px-3">
       <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
         تسجيل الدخول

@@ -10,6 +10,8 @@ import { SearchResultsComponent } from './components/search-results-component/se
 import { AdsFormComponent } from './components/ads-form-component/ads-form-component';
 import { CreateSectionComponent } from './components/create-section-component/create-section-component';
 import { EditSectionComponent } from './components/edit-section-component/edit-section-component';
+import { AdminLiveComponent } from './components/admin-live/admin-live';
+import { LiveViewerComponent } from './components/viewer/viewer';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,5 +26,14 @@ export const routes: Routes = [
   { path: 'sections/create', component: CreateSectionComponent, canActivate: [authGuard] },
   { path: 'sections/edit/:id', component: EditSectionComponent, canActivate: [authGuard] },
   { path: 'sections/:id', component: SectionNewsComponent },
+  {
+  path: 'admin/live',
+  component: AdminLiveComponent,
+  canActivate: [authGuard]
+},
+{
+  path: 'live-viewer',
+  component: LiveViewerComponent
+},
   { path: '**', redirectTo: '' }
 ];

@@ -10,7 +10,7 @@ export class AuthService {
   private apiUrl = 'https://localhost:7072/api/Auth';
   isAdmin = signal(false);
 
-  constructor(private http: HttpClient, private router: Router) { 
+  constructor(private http: HttpClient, private router: Router) {
     this.initializeAdminState();
   }
 
@@ -24,11 +24,11 @@ export class AuthService {
           if (response.user) {
             localStorage.setItem('user', JSON.stringify(response.user));
           }
-          
+
           // Set admin to true since we logged in successfully
           this.isAdmin.set(true);
           console.log('Admin status set to true after login');
-          
+
           this.router.navigate(['/']);
         }
       })
@@ -70,7 +70,7 @@ export class AuthService {
   initializeAdminState(): void {
     const token = localStorage.getItem('token');
     console.log('initializeAdminState called with token:', token ? 'exists' : 'null');
-    
+
     if (token) {
       if (!this.isTokenExpired()) {
         this.isAdmin.set(true);
@@ -87,7 +87,6 @@ export class AuthService {
     }
   }
 
-  // Getter method for easier access
   getIsAdmin(): boolean {
     return this.isAdmin();
   }
