@@ -2,41 +2,42 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-md-9">
-<h3 class="mb-4 text-center">أخبار القسم</h3>
+      <h3 class="mb-4 text-center text-danger">أخبار القسم</h3>
 
-  <div *ngIf="newsList.length === 0" class="alert alert-info text-center">
-    لا توجد أخبار في هذا القسم حاليًا.
-  </div>
-
-  <div *ngFor="let news of newsList" class="card mb-3 shadow-sm">
-    <div class="card-body d-flex flex-row align-items-start ">
-      <!-- ✅ الصورة clickable -->
-      <a [routerLink]="['/news', news.id]">
-        <img [src]="getImageUrl(news.imageUrl)"
-             (error)="onImageError($event)"
-             class="img-fluid rounded ms-4"
-             style="width: 150px; height: 100px; object-fit: cover;"
-             alt="صورة الخبر" />
-      </a>
-
-      <!-- ✅ النص clickable -->
-      <div>
-        <h5 class="mb-2">
-          <a [routerLink]="['/news', news.id]" class="text-danger text-decoration-none fw-bold">
-            {{ news.title }}
-          </a>
-        </h5>
-        <p class="text-muted">{{ news.content }}</p>
+      <div *ngIf="newsList.length === 0" class="alert alert-info text-center">
+        لا توجد أخبار في هذا القسم حاليًا.
+        <div *ngIf="authService.isAdmin()" class="mt-3">
+          <a routerLink="/addNews" class="btn btn-primary">➕ إضافة خبر جديد</a>
+        </div>
       </div>
 
-        <!-- ✅ أزرار Admin -->
-        <div *ngIf="authService.isAdmin()" class="mt-2">
-          <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-primary me-2">✏️ تعديل</a>
-          <button class="btn btn-sm btn-outline-danger" (click)="deleteNews(news.id)">🗑 حذف</button>
+      <div *ngFor="let news of newsList" class="card mb-3 shadow-sm">
+        <div class="card-body d-flex flex-row align-items-start">
+          <!-- ✅ الصورة clickable -->
+          <a [routerLink]="['/news', news.id]">
+            <img [src]="getImageUrl(news.imageUrl)"
+                 (error)="onImageError($event)"
+                 class="img-fluid rounded ms-4"
+                 style="width: 150px; height: 100px; object-fit: cover;"
+                 alt="صورة الخبر" />
+          </a>
 
-    </div>
-  </div>
-</div>
+          <!-- ✅ النص clickable -->
+          <div class="flex-grow-1">
+            <h5 class="mb-2 d-flex justify-content-between align-items-center">
+              <a [routerLink]="['/news', news.id]" class="text-danger text-decoration-none fw-bold ms-2">
+                {{ news.title }}
+              </a>
+              <!-- ✅ أزرار Admin -->
+              <div *ngIf="authService.isAdmin()" class="admin-buttons">
+                <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-primary">✏️ تعديل</a>
+                <button class="btn btn-sm btn-outline-danger me-2" (click)="deleteNews(news.id)">🗑️ حذف</button>
+              </div>
+            </h5>
+            <p class="text-muted">{{ news.content }}</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="col-md-3">

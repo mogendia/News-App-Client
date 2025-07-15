@@ -10,7 +10,8 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-section-news',
   standalone: true,
   imports: [CommonModule, RouterModule, AdSidebar],
-  templateUrl: './section-news-component.html'
+  templateUrl: './section-news-component.html',
+  styleUrls: ['./section-news-component.scss']
 })
 export class SectionNewsComponent implements OnInit {
   newsList: any[] = [];
