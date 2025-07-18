@@ -41,7 +41,7 @@ export class SearchResultsComponent implements OnInit {
   getImageUrl(imagePath: string): string {
     if (!imagePath) return '/assets/images/default-news.jpg';
     if (imagePath.startsWith('http')) return imagePath;
-    return `https://localhost:7072/${imagePath}`;
+    return `https://compass.runasp.net/${imagePath}`;
   }
 
   onImageError(event: any): void {

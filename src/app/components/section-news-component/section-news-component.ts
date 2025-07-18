@@ -60,7 +60,7 @@ deleteNews(id: number): void {
   if (imagePath.startsWith('http')) return imagePath;
   if (imagePath.startsWith('/assets')) return imagePath;
 
-  return `https://localhost:7072/${imagePath}`;
+  return `https://compass.runasp.net/${imagePath}`;
 }
 
 onImageError(event: any) {

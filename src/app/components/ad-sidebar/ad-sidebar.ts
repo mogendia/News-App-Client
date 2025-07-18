@@ -123,7 +123,7 @@ nextAd(): void {
 
   getFullImageUrl(url: string): string {
     if (!url) return '/assets/ads/default.png';
-    return url.startsWith('http') ? url : `https://localhost:7072/${url}`;
+    return url.startsWith('http') ? url : `https://compass.runasp.net/${url}`;
   }
 
   isImage(url: string): boolean {

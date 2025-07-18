@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ImageUrlService {
-  private apiBaseUrl = 'https://localhost:7072';
+  private apiBaseUrl = 'https://compass.runasp.net';
 
   getFullImageUrl(imagePath: string): string {
     if (!imagePath) return '/assets/images/default-news.jpg';

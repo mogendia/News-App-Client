@@ -57,7 +57,7 @@ loadNews(): void {
         return imagePath;
     }
     // وإلا، نفترض أنه مسار نسبي من الباك إند
-    return `https://localhost:7072/${imagePath}`;
+    return `https://compass.runasp.net/${imagePath}`;
 }
 
 addBreakingNews(): void {

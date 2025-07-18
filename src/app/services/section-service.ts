@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SectionService {
-  private apiUrl = 'https://localhost:7072/api/Sections';
+  private apiUrl = 'https://compass.runasp.net/api/Sections';
 
   constructor(private http: HttpClient) {}
 

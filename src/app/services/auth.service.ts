@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7072/api/Auth';
+  private apiUrl = 'https://compass.runasp.net/api/Auth';
   isAdmin = signal(false);
 
   constructor(private http: HttpClient, private router: Router) {

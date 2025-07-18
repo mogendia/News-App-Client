@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AdsService {
-  private apiUrl = 'https://localhost:7072/api/Ads';
+  private apiUrl = 'https://compass.runasp.net/api/Ads';
 
   constructor(private http: HttpClient) {}
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class NewsService {
-  private apiUrl = 'https://localhost:7072/api/News';
+  private apiUrl = 'https://compass.runasp.net/api/News';
 
   constructor(private http: HttpClient) {}
 
@@ -30,7 +30,7 @@ export class NewsService {
 }
 
 searchNews(query: string): Observable<any[]> {
-  return this.http.get<any[]>(`https://localhost:7072/api/News/search?query=${query}`);
+  return this.http.get<any[]>(`https://compass.runasp.net/api/News/search?query=${query}`);
 }
 
   addNews(formData: FormData): Observable<any> {

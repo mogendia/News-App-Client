@@ -4,7 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LiveService {
-  private connectionUrl = 'https://localhost:7072/liveHub';
+  private connectionUrl = 'https://compass.runasp.net/liveHub';
   private hubConnection!: signalR.HubConnection;
 private streamTitleSubject = new BehaviorSubject<string>('');
 streamTitle$ = this.streamTitleSubject.asObservable();

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BreakingNewsService {
-  private apiUrl = 'https://localhost:7072/api/News/breaking';
+  private apiUrl = 'https://compass.runasp.net/api/News/breaking';
 
   constructor(private http: HttpClient) {}
 
