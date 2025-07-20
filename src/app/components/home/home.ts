@@ -2,9 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { NewsService } from '../../services/News.service';
 import { AdSidebar } from "../ad-sidebar/ad-sidebar";
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { AuthService } from './../../services/auth.service';
+import { LiveService } from '../../services/Live.service';
 @Component({
  selector: 'app-home',
   standalone: true,
@@ -15,20 +16,32 @@ import { AuthService } from './../../services/auth.service';
 })
 
 export class HomeComponent implements OnInit {
+  isLive:Boolean = false;
   newsList: any[] = [];
   authService = inject(AuthService);
   breakingNewsText: string = '';
 
-  constructor(private newsService: NewsService) {}
+  constructor(private newsService: NewsService,
+    private router: Router,
+    private liveService: LiveService) {}
 
   ngOnInit(): void {
   this.loadNews();
-
+  this.liveService.startConnection();
+    this.liveService.isLive$.subscribe(isLive => {
+      this.isLive = isLive;
+    });
   window.addEventListener('breakingNewsUpdated', () => {
     this.loadNews();
   });
 }
-
+ navigateToLiveStream() {
+    if (this.authService.isSuperAdmin()) {
+      this.router.navigate(['/superadmin-dashboard']);
+    } else {
+      this.router.navigate(['/live/viewer']);
+    }
+  }
 loadNews(): void {
   this.newsService.getHomePageNews().subscribe(data => {
     this.newsList = data;
@@ -37,7 +50,7 @@ loadNews(): void {
   deleteNews(id: number): void {
     if (confirm('Are you sure you want to delete this news item?')) {
       this.newsService.deleteNews(id).subscribe(() => {
-        this.loadNews(); // Reload the news list after deletion
+        this.loadNews();
       });
     }
   }
@@ -48,15 +61,12 @@ loadNews(): void {
 
  getFullImageUrl(imagePath: string): string {
     if (!imagePath) return '/assets/images/default-news.jpg';
-    // إذا كان المسار يبدأ بـ http أو https، فهو مسار كامل
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
         return imagePath;
     }
-    // إذا كان المسار يبدأ بـ /assets، فهو مسار محلي
     if (imagePath.startsWith('/assets')) {
         return imagePath;
     }
-    // وإلا، نفترض أنه مسار نسبي من الباك إند
     return `https://compass.runasp.net/${imagePath}`;
 }
 

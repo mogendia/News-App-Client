@@ -1,15 +1,22 @@
 <div class="container mt-4 home-container">
   <div class="row">
     <div class="col-md-9 main-content">
+      <div class="header mb-2">
+        <button class="live-button" (click)="navigateToLiveStream()">
+          <i class="fas fa-broadcast-tower me-2"></i>
+          {{ authService.isSuperAdmin() ? 'إدارة البث المباشر' : 'مشاهدة البث المباشر' }}
+          <span class="live-indicator" *ngIf="isLive">• مباشر</span>
+        </button>
+      </div>
 
-     <div class="admin-controls d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
-  <a [routerLink]="['/edit/new']" class="btn btn-primary me-2">Add News</a>
-</div>
+      <div class="admin-controls d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
+        <a [routerLink]="['/edit/new']" class="btn btn-primary me-2">Add News</a>
+      </div>
 
       <div class="card mb-3 news-card" *ngFor="let news of newsList">
         <div class="card-body bg-light">
           <div class="d-flex">
-           <img [src]="getFullImageUrl(news.imageUrl)" class="me-3 news-image" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px; object-fit: cover;" (error)="onImageError($event)">
+            <img [src]="getFullImageUrl(news.imageUrl)" class="me-3 news-image" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px; object-fit: cover;" (error)="onImageError($event)">
             <div class="news-content">
               <h5>
                 <a [routerLink]="['/news', news.id]" class="text-danger">{{ news.title }}</a>
