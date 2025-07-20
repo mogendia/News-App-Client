@@ -1,0 +1,186 @@
+/* Home component responsive styles */
+$mobile: 576px;
+$tablet: 768px;
+$ipad: 992px;
+$desktop: 1200px;
+
+.home-container {
+  .row {
+    margin: 0;
+    
+    @media (max-width: $tablet) {
+      flex-direction: column;
+    }
+  }
+  
+  /* Main content area */
+  .main-content {
+    @media (max-width: $tablet) {
+      order: 1;
+      margin-bottom: 2rem;
+    }
+  }
+  
+  /* Sidebar adjustments */
+  .sidebar {
+    @media (max-width: $tablet) {
+      order: 2;
+    }
+  }
+  
+  /* News card styling */
+  .news-card {
+    .card-body {
+      .d-flex {
+        @media (max-width: $mobile) {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+        
+        @media (min-width: $mobile) and (max-width: $tablet) {
+          flex-direction: row;
+          align-items: flex-start;
+        }
+      }
+    }
+    
+    /* News image responsive */
+    .news-image {
+      @media (max-width: $mobile) {
+        width: 100% !important;
+        height: 200px !important;
+        margin: 0 0 1rem 0 !important;
+        border-radius: 15px !important;
+      }
+      
+      @media (min-width: $mobile) and (max-width: $tablet) {
+        width: 120px !important;
+        height: 80px !important;
+        margin-left: 10px !important;
+      }
+      
+      @media (min-width: $tablet) and (max-width: $ipad) {
+        width: 140px !important;
+        height: 90px !important;
+      }
+    }
+    
+    /* News content */
+    .news-content {
+      @media (max-width: $mobile) {
+        width: 100%;
+      }
+      
+      h5 {
+        @media (max-width: $mobile) {
+          font-size: 1.1rem;
+          margin-bottom: 0.75rem;
+        }
+        
+        @media (min-width: $mobile) and (max-width: $tablet) {
+          font-size: 1rem;
+        }
+      }
+      
+      p {
+        @media (max-width: $mobile) {
+          font-size: 0.9rem;
+          line-height: 1.4;
+        }
+        
+        @media (min-width: $mobile) and (max-width: $tablet) {
+          font-size: 0.85rem;
+        }
+      }
+    }
+    
+    /* Admin buttons */
+    .admin-buttons {
+      @media (max-width: $mobile) {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        
+        .btn {
+          flex: 1;
+          max-width: 120px;
+        }
+      }
+      
+      @media (min-width: $mobile) and (max-width: $tablet) {
+        .btn {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+      }
+    }
+  }
+  
+  /* Admin controls */
+  .admin-controls {
+    @media (max-width: $mobile) {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    
+    @media (min-width: $mobile) and (max-width: $tablet) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      
+      .btn {
+        flex: 1;
+        min-width: 140px;
+      }
+    }
+  }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: $mobile) {
+  .container {
+    .mt-4 {
+      margin-top: 1rem !important;
+    }
+    
+    .mb-3 {
+      margin-bottom: 1rem !important;
+    }
+    
+    .mb-5 {
+      margin-bottom: 1.5rem !important;
+    }
+  }
+}
+
+/* Tablet specific adjustments */
+@media (min-width: $tablet) and (max-width: $ipad) {
+  .home-container {
+    .col-md-9 {
+      padding-right: 10px;
+    }
+    
+    .col-md-3 {
+      padding-left: 10px;
+    }
+  }
+}
+
+/* Large tablet/iPad Pro adjustments */
+@media (min-width: $ipad) and (max-width: $desktop) {
+  .home-container {
+    .container {
+      max-width: 95%;
+    }
+  }
+}

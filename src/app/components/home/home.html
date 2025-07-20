@@ -1,30 +1,32 @@
-<div class="container mt-4">
+<div class="container mt-4 home-container">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-9 main-content">
 
-     <div class="d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
+     <div class="admin-controls d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
   <a [routerLink]="['/edit/new']" class="btn btn-primary me-2">Add News</a>
 <a [routerLink]="['/admin/live']" class="btn btn-danger me-2">🎥 لوحة البث</a>
 </div>
 
-      <div class="card mb-3" *ngFor="let news of newsList">
+      <div class="card mb-3 news-card" *ngFor="let news of newsList">
         <div class="card-body bg-light">
           <div class="d-flex">
-           <img [src]="getFullImageUrl(news.imageUrl)" class="me-3" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px; object-fit: cover;" (error)="onImageError($event)">
-            <div>
+           <img [src]="getFullImageUrl(news.imageUrl)" class="me-3 news-image" alt="{{ news.title }}" style="width: 150px; height: 100px; border-radius: 15px; margin-left: 15px; object-fit: cover;" (error)="onImageError($event)">
+            <div class="news-content">
               <h5>
                 <a [routerLink]="['/news', news.id]" class="text-danger">{{ news.title }}</a>
               </h5>
               <p>{{ news.content }}</p>
-              <a *ngIf="authService.isAdmin()" [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-danger mt-2 ms-2">تعديل</a>
-              <button *ngIf="authService.isAdmin()" (click)="deleteNews(news.id)" class="btn btn-sm btn-danger mt-2 ms-2">حذف</button>
+              <div class="admin-buttons" *ngIf="authService.isAdmin()">
+                <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-danger mt-2 ms-2">تعديل</a>
+                <button (click)="deleteNews(news.id)" class="btn btn-sm btn-danger mt-2 ms-2">حذف</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-3 sidebar">
       <app-ad-sidebar></app-ad-sidebar>
     </div>
   </div>

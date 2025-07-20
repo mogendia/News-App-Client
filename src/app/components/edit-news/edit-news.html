@@ -14,12 +14,13 @@
         <div class="mb-3">
           <textarea formControlName="content" class="form-control" rows="5" placeholder="محتوى الخبر"></textarea>
         </div>
+         <div class="mb-3">
+          <input formControlName="writtenBy" class="form-control" placeholder="اسم الناشر" />
+        </div>
 
-        <!-- الصورة -->
         <div class="mb-3">
           <label class="form-label">صورة الخبر</label>
 
-          <!-- ✅ عرض الصورة القديمة (من السيرفر) -->
           <div *ngIf="!selectedFile && imagePreview" class="mb-2">
             <img [src]="imageUrlService.getFullImageUrl(imagePreview)"
                  (error)="imageUrlService.handleImageError($event)"
@@ -27,18 +28,15 @@
                  style="max-height: 300px; width: auto; margin: 10px 0; border-radius: 10px;">
           </div>
 
-          <!-- ✅ معاينة الصورة الجديدة (Base64 preview) -->
           <div *ngIf="selectedFile && imagePreview" class="mb-2">
             <img [src]="imagePreview"
                  class="img-fluid img-preview"
                  style="max-height: 300px; width: auto; margin: 10px 0; border-radius: 10px;">
           </div>
 
-          <!-- ✅ اختيار صورة -->
           <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)" />
         </div>
 
-        <!-- اختيار القسم -->
         <div class="mb-3">
           <label class="form-label">القسم</label>
           <select class="form-control" formControlName="sectionId">
@@ -48,18 +46,16 @@
             <option [value]="4">حوادث </option>
             <option [value]="5">رياضة</option>
             <option [value]="6">معمار </option>
-           
+
           </select>
         </div>
 
-        <!-- هل هو خبر عاجل؟ -->
         <div class="form-check form-switch mb-3 ps-5">
           <input type="checkbox" class="form-check-input" formControlName="isImportant" id="isImportant"
                  style="width: 3em; height: 1.5em; margin-left: 15px;">
           <label class="form-check-label fw-bold fs-5" for="isImportant">عرض في شريط الأخبار العاجلة</label>
         </div>
 
-        <!-- هل يظهر في الرئيسية؟ -->
         <div class="form-check form-switch mb-3 ps-5">
           <input type="checkbox" class="form-check-input" formControlName="isHomePage" id="isHomePage"
                  style="width: 3em; height: 1.5em; margin-left: 15px;">

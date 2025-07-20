@@ -45,7 +45,7 @@ export class AdSidebar implements OnInit, AfterViewChecked {
 
       videoEl.play().catch(err => {
         console.warn('فشل تشغيل الفيديو تلقائيًا:', err);
-        setTimeout(() => this.nextAd(), 20000);
+        setTimeout(() => this.nextAd(), 30000);
       });
 
       videoEl.onended = () => {

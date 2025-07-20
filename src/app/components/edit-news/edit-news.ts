@@ -39,6 +39,7 @@ export class EditNewsComponent implements OnInit {
     this.form = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
+      writtenBy: ['', Validators.required],
       imageUrl: [''],
       sectionId: [1, Validators.required],
       isImportant: [false],
@@ -58,7 +59,8 @@ export class EditNewsComponent implements OnInit {
           imageUrl: news.imageUrl,
           sectionId: news.sectionId,
           isImportant: news.isImportant,
-          isHomePage: news.isHomePage
+          isHomePage: news.isHomePage,
+          writtenBy: news.writtenBy,
         });
         this.imagePreview = news.imageUrl;
 
@@ -88,16 +90,15 @@ if (this.form.invalid) {
 
   const formData = new FormData();
   formData.append('title', this.form.get('title')?.value);
+  formData.append('writtenBy', this.form.get('writtenBy')?.value);
   formData.append('content', this.form.get('content')?.value);
   formData.append('sectionId', this.form.get('sectionId')?.value);
   formData.append('isImportant', this.form.get('isImportant')?.value ? 'true' : 'false');
   formData.append('isHomePage', this.form.get('isHomePage')?.value ? 'true' : 'false');
 
-  // إذا كان هناك ملف صورة جديد تم اختياره
   if (this.selectedFile) {
     formData.append('image', this.selectedFile);
   }
-  // إذا كان هناك مسار صورة موجود (من قبل) ولم يتم تغييره
   else if (this.imagePreview) {
     formData.append('imageUrl', this.form.get('imageUrl')?.value);
   }

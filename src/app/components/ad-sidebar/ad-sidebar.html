@@ -2,25 +2,21 @@
   <div class="card ad-card text-white" *ngIf="currentAd || authService.isAdmin()">
     <div class="card-body text-center">
 
-      <!-- ✅ لا يوجد إعلان -->
       <ng-container *ngIf="!currentAd && authService.isAdmin()">
         <p class="mb-3">لا يوجد إعلان حالي</p>
         <button class="btn btn-success btn-sm" (click)="goToAdd()">➕ إضافة إعلان</button>
       </ng-container>
 
-      <!-- ✅ يوجد إعلان -->
       <ng-container *ngIf="currentAd">
         <h5>{{ currentAd?.title }}</h5>
         <p>{{ currentAd?.description }}</p>
 
-        <!-- صورة -->
         <img *ngIf="isImage(currentAd.mediaUrl)"
              [src]="getFullImageUrl(currentAd.mediaUrl)"
              class="media-box mb-2"
              alt="Ad"
              (error)="onImageError($event)" />
 
-        <!-- فيديو بصوت -->
         <video *ngIf="isVideo(currentAd.mediaUrl)"
                #adVideo
                [src]="getFullImageUrl(currentAd.mediaUrl)"
@@ -31,7 +27,6 @@
                (loadedmetadata)="adVideo.play()"
         ></video>
 
-        <!-- أزرار Admin -->
         <div *ngIf="authService.isAdmin()" class="mt-3 d-flex justify-content-center flex-wrap gap-2">
           <button class="btn btn-warning btn-sm" (click)="goToEdit()">✏️ تعديل</button>
           <button class="btn btn-dark btn-sm" (click)="deleteAd(currentAd?.id)">❌ حذف</button>

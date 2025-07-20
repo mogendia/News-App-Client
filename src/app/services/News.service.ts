@@ -30,7 +30,7 @@ export class NewsService {
 }
 
 searchNews(query: string): Observable<any[]> {
-  return this.http.get<any[]>(`https://compass.runasp.net/api/News/search?query=${query}`);
+  return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
 }
 
   addNews(formData: FormData): Observable<any> {
@@ -79,4 +79,15 @@ createNewsWithFile(formData: FormData): Observable<any> {
   updateNewsWithFile(id: number, formData: FormData): Observable<any> {
   return this.http.put(`${this.apiUrl}/${id}`, formData, { headers: this.getHeaders() });
 }
+getPendingNews(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/pending`, { headers: this.getHeaders() });
+  }
+
+  approveNews(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/approve/${id}`, {}, { headers: this.getHeaders() });
+  }
+
+  rejectNews(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reject/${id}`, {}, { headers: this.getHeaders() });
+  }
 }
