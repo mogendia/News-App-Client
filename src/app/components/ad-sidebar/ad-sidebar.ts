@@ -11,8 +11,7 @@ import { AuthService } from './../../services/auth.service';
   styleUrl: './ad-sidebar.scss'
 })
 export class AdSidebar implements OnInit, AfterViewChecked {
-
-@ViewChild('adVideo') adVideoRef!: ElementRef<HTMLVideoElement>;
+  @ViewChild('adVideo') adVideoRef!: ElementRef<HTMLVideoElement>;
 
   authService = inject(AuthService);
   adsService = inject(AdsService);
@@ -22,38 +21,35 @@ export class AdSidebar implements OnInit, AfterViewChecked {
   currentAdIndex: number = 0;
   videoElement!: HTMLVideoElement;
 
-
   ngAfterViewChecked(): void {
-  if (!this.currentAd) return;
+    if (!this.currentAd) return;
 
-  if (this.isImage(this.currentAd.mediaUrl)) {
-    if (!this.imageTimeoutSet) {
-      this.imageTimeoutSet = true;
-      setTimeout(() => {
-        this.imageTimeoutSet = false;
-        this.nextAd();
-      }, 5000); // 5 ثواني
+    if (this.isImage(this.currentAd.mediaUrl)) {
+      if (!this.imageTimeoutSet) {
+        this.imageTimeoutSet = true;
+        setTimeout(() => {
+          this.imageTimeoutSet = false;
+          this.nextAd();
+        }, 5000);
+      }
+    } else if (this.isVideo(this.currentAd.mediaUrl)) {
+      const videoEl = this.adVideoRef?.nativeElement;
+      if (videoEl) {
+        videoEl.muted = true;
+        videoEl.autoplay = true;
+        videoEl.playsInline = true;
+
+        videoEl.play().catch(err => {
+          console.warn('فشل تشغيل الفيديو تلقائيًا:', err);
+          setTimeout(() => this.nextAd(), 30000);
+        });
+
+        videoEl.onended = () => {
+          this.nextAd();
+        };
+      }
     }
   }
-
-  else if (this.isVideo(this.currentAd.mediaUrl)) {
-    const videoEl = this.adVideoRef?.nativeElement;
-    if (videoEl) {
-      videoEl.muted = true;
-      videoEl.autoplay = true;
-      videoEl.playsInline = true;
-
-      videoEl.play().catch(err => {
-        console.warn('فشل تشغيل الفيديو تلقائيًا:', err);
-        setTimeout(() => this.nextAd(), 30000);
-      });
-
-      videoEl.onended = () => {
-        this.nextAd();
-      };
-    }
-  }
-}
 
   ngOnInit(): void {
     this.loadAds();
@@ -74,25 +70,30 @@ export class AdSidebar implements OnInit, AfterViewChecked {
   }
 
   startAdRotation(): void {
-  this.currentAd = this.adsList[this.currentAdIndex];
-}
-
-unmuteVideo(): void {
-  const video = this.adVideoRef?.nativeElement;
-  if (video) {
-    video.muted = false;
-    video.play().catch(err => {
-      console.warn('فشل إعادة تشغيل الفيديو بالصوت:', err);
-    });
+    this.currentAd = this.adsList[this.currentAdIndex];
   }
-}
 
-nextAd(): void {
-  this.currentAdIndex = (this.currentAdIndex + 1) % this.adsList.length;
-  this.startAdRotation();
-}
+  unmuteVideo(): void {
+    const video = this.adVideoRef?.nativeElement;
+    if (video) {
+      video.muted = false;
+      video.play().catch(err => {
+        console.warn('فشل إعادة تشغيل الفيديو بالصوت:', err);
+      });
+    }
+  }
+
+  nextAd(): void {
+    this.currentAdIndex = (this.currentAdIndex + 1) % this.adsList.length;
+    this.startAdRotation();
+  }
 
   deleteAd(id: number): void {
+    if (!this.authService.getIsSuperAdmin()) {
+      alert('ليس لديك الصلاحية لحذف الإعلان. يجب أن تكون SuperAdmin.');
+      return;
+    }
+
     if (confirm('هل أنت متأكد من حذف هذا الإعلان؟')) {
       this.adsService.deleteAd(id).subscribe({
         next: () => {
@@ -108,10 +109,18 @@ nextAd(): void {
   }
 
   goToAdd(): void {
+    if (!this.authService.getIsSuperAdmin()) {
+      alert('ليس لديك الصلاحية لإضافة إعلان. يجب أن تكون SuperAdmin.');
+      return;
+    }
     window.location.href = '/ads/create';
   }
 
   goToEdit(): void {
+    if (!this.authService.getIsSuperAdmin()) {
+      alert('ليس لديك الصلاحية لتعديل الإعلان. يجب أن تكون SuperAdmin.');
+      return;
+    }
     if (this.currentAd?.id) {
       window.location.href = `/ads/edit/${this.currentAd.id}`;
     }

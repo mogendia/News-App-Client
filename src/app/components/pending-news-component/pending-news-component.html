@@ -1,0 +1,12 @@
+    <section class="pending-news">
+      <h2>الأخبار المعلقة</h2>
+      <div *ngIf="pendingNews.length === 0">لا توجد أخبار معلقة</div>
+      <div *ngFor="let news of pendingNews" class="news-item">
+        <h3>{{ news.title }}</h3>
+        <p>{{ news.content | slice:0:100 }}...</p>
+        <p>القسم: {{ news.sectionName }}</p>
+        <p>الحالة: {{ news.status }}</p>
+        <button (click)="approveNews(news.id)">الموافقة</button>
+        <button (click)="rejectNews(news.id)">الرفض</button>
+      </div>
+    </section>

@@ -1,13 +1,22 @@
 <nav class="navbar">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">
-      <img src="./favicon.ico" alt="Logo" class="logo">
-      <i class="me-2">البوصلــة</i>
-    </a>
+<a class="navbar-brand" routerLink="/">
+  <img src="./favicon.ico" alt="Logo" class="logo" />
+  <div>
+    <i class="me-2 fw-bold fs-4">البوصلــــــة</i>
+    <small class="subtext me-2">الــبــوصــلــة.. الحقـيـقـة لها اتـجـاه</small>
+  </div>
+</a>
 
     <form class="form-inline mx-auto" (ngSubmit)="searchNews()">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="ابحث عن خبر" [(ngModel)]="searchTerm" name="searchTerm">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="ابحث عن خبر"
+          [(ngModel)]="searchTerm"
+          name="searchTerm"
+        />
         <div class="input-group-append">
           <button class="btn btn-primary" type="submit">
             <i class="material-icons">search</i>
@@ -15,53 +24,128 @@
         </div>
       </div>
     </form>
-<a *ngIf="!authService.isAdmin()" class="btn btn-danger ms-2" [routerLink]="['/live']">
-  🎬 مشاهدة البث
-</a>
-
     <div class="dropdown me-3" *ngIf="sectionList.length > 0">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenuButton"
+        data-bs-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
         الأقــســام
       </button>
-      <div class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenuButton">
-        <div *ngFor="let section of sectionList"
-             class="d-flex align-items-center px-3 py-2 border-bottom"
-             [ngClass]="authService.isAdmin() ? 'justify-content-between' : 'justify-content-center'">
-          <a class="text-dark text-decoration-none"
-             [ngClass]="authService.isAdmin() ? 'flex-grow-1 text-start' : 'text-center'"
-             [routerLink]="['/sections', section.id]">
+      <div
+        class="dropdown-menu dropdown-menu-end text-center"
+        aria-labelledby="dropdownMenuButton"
+      >
+        <div
+          *ngFor="let section of sectionList"
+          class="d-flex align-items-center px-3 py-2 border-bottom"
+          [ngClass]="
+            authService.getIsSuperAdmin()
+              ? 'justify-content-between'
+              : 'justify-content-center'
+          "
+        >
+          <a
+            class="text-dark text-decoration-none"
+            [ngClass]="
+              authService.getIsSuperAdmin()
+                ? 'flex-grow-1 text-start'
+                : 'text-center'
+            "
+            [routerLink]="['/sections', section.id]"
+          >
             {{ section.name }}
           </a>
 
-          <div *ngIf="authService.isAdmin()" class="d-flex">
-            <button class="btn btn-sm btn-outline-primary me-1"
-                    (click)="editSection(section.id)">
+          <div *ngIf="authService.getIsSuperAdmin()" class="d-flex">
+            <button
+              class="btn btn-sm btn-outline-primary me-1"
+              (click)="editSection(section.id)"
+            >
               ✏️
             </button>
 
-            <button class="btn btn-sm btn-outline-danger"
-                    (click)="deleteSection(section.id)">
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deleteSection(section.id)"
+            >
               ❌
             </button>
           </div>
         </div>
 
         <div class="dropdown-divider"></div>
-        <button class="btn btn-sm btn-success w-100" *ngIf="authService.isAdmin()" (click)="goToAddSection()">
+        <button
+          class="btn btn-sm btn-success w-100"
+          *ngIf="authService.getIsSuperAdmin()"
+          (click)="goToAddSection()"
+        >
           ➕ إضافة قسم جديد
         </button>
       </div>
     </div>
+    <div class="dropdown px-3" *ngIf="authService.getIsSuperAdmin()">
+  <button
+    class="btn btn-secondary dropdown-toggle"
+    type="button"
+    data-bs-toggle="dropdown"
+  >
+    سوبر مشرف
+  </button>
+  <div class="dropdown-menu text-center">
+    <button
+      class="btn btn-primary mb-2"
+      [routerLink]="['/pending-news']"
+    >
+      الأخبار المعلقة
+    </button>
+    <button
+      class="btn btn-primary mb-2"
+      [routerLink]="['/admins']"
+    >
+      إدارة المشرفين
+    </button>
+  </div>
+</div>
 
     <div class="dropdown px-3">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        تسجيل الدخول
-      </button>
+  <button
+  class="btn btn-secondary dropdown-toggle"
+  id="authDropdown"
+  type="button"
+  data-bs-toggle="dropdown"
+  aria-expanded="false"
+>
+  {{ authService.isAuthenticated() ? 'تسجيل الخروج' : 'تسجيل الدخول' }}
+</button>
       <div class="dropdown-menu text-center">
-        <button class="btn btn-primary mb-2" *ngIf="!authService.isAdmin()" [routerLink]="['/login']">الدخول</button>
-        <button class="btn btn-primary mb-2" *ngIf="authService.isAdmin()" (click)="authService.logout()">تسجيل الخروج</button>
-        <a class="btn btn-secondary" *ngIf="authService.isAdmin()" [routerLink]="['/register-admin']">انشاء حساب</a>
+        <button
+          class="btn btn-primary mb-2"
+          *ngIf="!authService.getIsSuperAdmin()"
+          [routerLink]="['/login']"
+        >
+          تسجيل الدخول
+        </button>
+        <button
+          class="btn btn-primary mb-2"
+          *ngIf="authService.getIsSuperAdmin()"
+          (click)="authService.logout()"
+        >
+          تسجيل الخروج
+        </button>
+        <a
+          class="btn btn-secondary mb-2"
+          *ngIf="authService.getIsSuperAdmin()"
+          [routerLink]="['/register-admin']"
+          >انشاء حساب مشرف</a>
+          <a
+          class="btn btn-secondary"
+          *ngIf="authService.getIsSuperAdmin()"
+          [routerLink]="['/register-superadmin']"
+          > حساب سوبر مشرف</a>
       </div>
     </div>
   </div>

@@ -1,0 +1,46 @@
+<section class="admins" style="font-family: 'Cairo', sans-serif; direction: rtl; padding: 20px;">
+
+      <!-- Admins List -->
+      <div class="admins-list">
+        <h3>قائمة المشرفين</h3>
+        <div *ngIf="admins.length === 0">لا توجد مشرفين</div>
+        <table class="table" *ngIf="admins.length > 0">
+          <thead>
+            <tr>
+              <th>البريد الإلكتروني</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let admin of admins">
+              <td>{{ admin.email }}</td>
+              <td>
+                <button class="btn btn-warning" (click)="editAdmin(admin)">تعديل</button>
+                <button class="btn btn-danger" (click)="deleteAdmin(admin.id)">حذف</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Edit Admin Modal -->
+      <div class="modal" *ngIf="showEditModal" style="display: block;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">تعديل المشرف</h5>
+              <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="editForm" (ngSubmit)="updateAdmin()">
+                <div class="form-group">
+                  <label for="editEmail">البريد الإلكتروني</label>
+                  <input id="editEmail" formControlName="email" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">حفظ</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

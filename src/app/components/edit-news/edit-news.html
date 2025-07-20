@@ -37,6 +37,10 @@
           <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)" />
         </div>
 
+          <div class="mb-3">
+          <input formControlName="imageContent" class="form-control" placeholder="محتوي الصورة" />
+        </div>
+
         <div class="mb-3">
           <label class="form-label">القسم</label>
           <select class="form-control" formControlName="sectionId">

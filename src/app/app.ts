@@ -19,6 +19,6 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     // Initialize admin state when app starts
-    this.authService.initializeAdminState();
+    this.authService.initializeAuthState();
   }
 }

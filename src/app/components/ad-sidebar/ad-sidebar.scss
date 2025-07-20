@@ -4,15 +4,15 @@ $ipad: 992px;
 $desktop: 1200px;
 
 .ad-card {
-  background-color: #2c3e50;
+  background-color: #c80000;
   color: #2c3e50;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  
+
   @media (max-width: $tablet) {
     margin-bottom: 2rem;
   }
-  
+
   @media (max-width: $mobile) {
     margin-bottom: 1.5rem;
   }
@@ -24,15 +24,15 @@ $desktop: 1200px;
   object-fit: cover;
   border-radius: 10px;
   height: 350px;
-  
+
   @media (max-width: $mobile) {
     height: 250px;
   }
-  
+
   @media (min-width: $mobile) and (max-width: $tablet) {
     height: 300px;
   }
-  
+
   @media (min-width: $tablet) and (max-width: $ipad) {
     height: 320px;
   }

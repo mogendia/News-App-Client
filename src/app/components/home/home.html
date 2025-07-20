@@ -4,7 +4,6 @@
 
      <div class="admin-controls d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
   <a [routerLink]="['/edit/new']" class="btn btn-primary me-2">Add News</a>
-<a [routerLink]="['/admin/live']" class="btn btn-danger me-2">🎥 لوحة البث</a>
 </div>
 
       <div class="card mb-3 news-card" *ngFor="let news of newsList">

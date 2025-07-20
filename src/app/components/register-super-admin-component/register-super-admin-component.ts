@@ -3,15 +3,13 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 @Component({
-  selector: 'app-register-admin',
-  standalone: true,
+  selector: 'app-register-super-admin-component',
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './register-admin.html',
-  styleUrls: ['./register-admin.scss'],
+  templateUrl: './register-super-admin-component.html',
+  styleUrl: './register-super-admin-component.scss'
 })
-export class RegisterAdminComponent {
+export class RegisterSuperAdminComponent {
   registerForm: FormGroup;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
@@ -23,13 +21,13 @@ export class RegisterAdminComponent {
 
   register(): void {
     if (this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe({
+      this.authService.registerSuperAdmin(this.registerForm.value).subscribe({
         next: () => {
-          alert('تم إنشاء حساب المشرف بنجاح');
+          alert('تم إنشاء حساب السوبر مشرف بنجاح');
           this.router.navigate(['/admins']);
         },
         error: (error) => {
-          console.error('Error registering admin:', error);
+          console.error('Error registering superadmin:', error);
           alert('حدث خطأ أثناء إنشاء الحساب');
         }
       });

@@ -1,17 +1,35 @@
 <div class="row">
   <div class="col-md-9">
     <div class="container mt-4 mb-5" dir="rtl" *ngIf="news">
-        <div *ngIf="news.isImportant" class="alert alert-danger fw-bold">
-    🔥 هذا الخبر ضمن الأخبار العاجلة
-  </div>
+      <div *ngIf="news.isImportant" class="alert alert-danger fw-bold">
+        🔥 هذا الخبر ضمن الأخبار العاجلة
+      </div>
       <div class="card bg-light">
         <div class="card-body text-center">
-           <h3 class="text-danger">{{ news.title }}</h3>
-  <div class="news-timestamp" style="text-align: right; margin-bottom: 10px;">
-            {{ news.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-          </div>          <img [src]="getFullImageUrl(news.imageUrl)" class="img-fluid mb-3"
-               alt="{{ news.title }}" style="max-height: 400px;">
-           <small class="text-danger text-center">{{ news.writtenBy }}</small>
+          <h3 class="text-danger">{{ news.title }}</h3>
+          <div
+            class="news-timestamp"
+            style="text-align: right; margin-bottom: 10px"
+          >
+{{ news.createdAt | date: 'EEEE، d MMMM y hh:mm a' : '+0300' : 'ar-EG' }}
+
+          </div>
+            <img
+              [src]="getFullImageUrl(news.imageUrl)"
+              class="img-fluid mb-3"
+              alt="{{ news.title }}"
+              style="max-height: 400px"
+            />
+            <small class="text-danger d-block mt-1">
+              {{ news.imageContent }}
+            </small>
+            <hr class="my-3" />
+
+
+          <div style="text-align: right; font-size: 24px">
+            <span style="color: black">كتب الخبر بواسطة :</span>
+            <span class="text-danger">{{ news.writtenBy }}</span>
+          </div>
           <p>{{ news.content }}</p>
         </div>
       </div>

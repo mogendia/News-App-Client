@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminControl } from './admin-control';
+import { PendingNewsComponent } from './pending-news-component';
 
-describe('AdminControl', () => {
-  let component: AdminControl;
-  let fixture: ComponentFixture<AdminControl>;
+describe('PendingNewsComponent', () => {
+  let component: PendingNewsComponent;
+  let fixture: ComponentFixture<PendingNewsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminControl]
+      imports: [PendingNewsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AdminControl);
+    fixture = TestBed.createComponent(PendingNewsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

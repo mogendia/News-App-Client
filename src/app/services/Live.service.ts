@@ -6,45 +6,68 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class LiveService {
   private connectionUrl = 'https://compass.runasp.net/liveHub';
   private hubConnection!: signalR.HubConnection;
-private streamTitleSubject = new BehaviorSubject<string>('');
-streamTitle$ = this.streamTitleSubject.asObservable();
-
-private isLiveSubject = new BehaviorSubject<boolean>(false);
-isLive$ = this.isLiveSubject.asObservable();
+  private streamTitleSubject = new BehaviorSubject<string>('');
+  streamTitle$ = this.streamTitleSubject.asObservable();
+  private isLiveSubject = new BehaviorSubject<boolean>(false);
+  isLive$ = this.isLiveSubject.asObservable();
   private streamStartedSource = new Subject<string>();
   streamStarted$ = this.streamStartedSource.asObservable();
-
   private messageSource = new Subject<{ user: string; message: string }>();
   message$ = this.messageSource.asObservable();
-
   private userCountSource = new Subject<number>();
   userCount$ = this.userCountSource.asObservable();
-
   private answerSource = new Subject<{ viewerId: string; sdp: string }>();
   answerReceived$ = this.answerSource.asObservable();
-
   private candidateFromAdminSource = new Subject<string>();
   candidateReceivedFromAdmin$ = this.candidateFromAdminSource.asObservable();
-
   private candidateFromViewerSource = new Subject<{ fromId: string; candidate: string }>();
   candidateReceived$ = this.candidateFromViewerSource.asObservable();
   private viewerId: string = '';
+
+  // إعداد خوادم STUN/TURN
+  public readonly rtcConfiguration: RTCConfiguration = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      // يمكن إضافة خادم TURN هنا إذا لزم الأمر
+    ]
+  };
 
   startConnection(): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(this.connectionUrl)
       .withAutomaticReconnect()
       .build();
+
+    // معالجة أحداث إعادة الاتصال
+    this.hubConnection.onreconnecting((error) => {
+      console.warn('SignalR reconnecting:', error);
+      this.isLiveSubject.next(false); // إعادة تعيين حالة البث أثناء إعادة الاتصال
+    });
+
+    this.hubConnection.onreconnected(() => {
+      console.log('SignalR reconnected');
+      this.sendViewerId(); // إعادة إرسال viewerId عند إعادة الاتصال
+    });
+
+    this.hubConnection.onclose((error) => {
+      console.error('SignalR connection closed:', error);
+      this.isLiveSubject.next(false);
+    });
+
+    // إعداد معالجات الأحداث
     this.hubConnection.on('ReceiveViewerId', (id: string) => {
       this.viewerId = id;
     });
-    this.hubConnection.on('OnLiveStarted', (title: string) => {
-      this.streamStartedSource.next(title);
-    });
-    this.hubConnection.start().then(() => console.log('✅ SignalR Connected'));
 
     this.hubConnection.on('OnLiveStarted', (title: string) => {
       this.streamStartedSource.next(title);
+      this.streamTitleSubject.next(title);
+      this.isLiveSubject.next(true);
+    });
+
+    this.hubConnection.on('OnLiveEnded', () => {
+      this.streamTitleSubject.next('');
+      this.isLiveSubject.next(false);
     });
 
     this.hubConnection.on('ReceiveMessage', (user: string, message: string) => {
@@ -66,48 +89,113 @@ isLive$ = this.isLiveSubject.asObservable();
     this.hubConnection.on('CandidateFromAdmin', (candidate: string) => {
       this.candidateFromAdminSource.next(candidate);
     });
+
+    // بدء الاتصال
+    this.hubConnection.start()
+      .then(() => console.log('✅ SignalR Connected'))
+      .catch(err => console.error('Error starting SignalR connection:', err));
   }
 
   get connection(): signalR.HubConnection {
     return this.hubConnection;
   }
 
-  sendMessage(user: string, message: string): void {
-    this.hubConnection.invoke('SendMessage', user, message);
+  // دالة لإغلاق الاتصال
+  stopConnection(): void {
+    if (this.hubConnection && this.hubConnection.state === signalR.HubConnectionState.Connected) {
+      this.hubConnection.stop()
+        .then(() => console.log('SignalR connection stopped'))
+        .catch(err => console.error('Error stopping SignalR connection:', err));
+    }
+  }
+
+  // التحقق من حالة الاتصال قبل الإرسال
+  private ensureConnection(): Promise<void> {
+    if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
+      return Promise.resolve();
+    }
+    return this.hubConnection.start()
+      .then(() => console.log('SignalR connection re-established'))
+      .catch(err => {
+        console.error('Error re-establishing SignalR connection:', err);
+        throw err;
+      });
+  }
+
+  async sendMessage(user: string, message: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('SendMessage', user, message);
+    } catch (err) {
+      console.error('Error sending message:', err);
+    }
   }
 
   startLive(title: string): void {
-  this.streamTitleSubject.next(title);
-  this.isLiveSubject.next(true);
+    this.streamTitleSubject.next(title);
+    this.isLiveSubject.next(true);
+    this.hubConnection.invoke('StartLive', title)
+      .catch(err => console.error('Error starting live:', err));
   }
 
   stopLive(): void {
-  this.streamTitleSubject.next('');
-  this.isLiveSubject.next(false);
- }
-
-  sendOffer(viewerId: string, sdp: string): void {
-    this.hubConnection.invoke('SendOfferToViewer', viewerId, sdp);
+    this.streamTitleSubject.next('');
+    this.isLiveSubject.next(false);
+    this.hubConnection.invoke('OnLiveEnded')
+      .catch(err => console.error('Error stopping live:', err));
   }
 
-  sendCandidate(viewerId: string, candidate: string): void {
-    this.hubConnection.invoke('SendCandidateToViewer', viewerId, candidate);
+  async sendOffer(viewerId: string, sdp: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('SendOfferToViewer', viewerId, sdp);
+    } catch (err) {
+      console.error('Error sending offer:', err);
+    }
   }
 
-  sendViewerId(): void {
-    this.hubConnection.invoke('GetViewerId');
+  async sendCandidate(viewerId: string, candidate: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('SendCandidateToViewer', viewerId, candidate);
+    } catch (err) {
+      console.error('Error sending candidate:', err);
+    }
   }
 
-  sendOfferToAdmin(sdp: string): void {
-    this.hubConnection.invoke('SendOfferToAdmin', sdp);
+  async sendViewerId(): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('GetViewerId');
+    } catch (err) {
+      console.error('Error sending viewerId:', err);
+    }
   }
 
-  sendCandidateToAdmin(candidate: string): void {
-    this.hubConnection.invoke('SendCandidateToAdmin', candidate);
+  async sendOfferToAdmin(sdp: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('SendOfferToAdmin', sdp);
+    } catch (err) {
+      console.error('Error sending offer to admin:', err);
+    }
   }
-  sendAnswerToAdmin(sdp: string): void {
-  this.connection.invoke('ReceiveAnswerFromViewer', this.viewerId, sdp)
-    .catch(err => console.error('Error sending answer to admin:', err));
-}
 
+  async sendCandidateToAdmin(candidate: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('SendCandidateToAdmin', candidate);
+    } catch (err) {
+      console.error('Error sending candidate to admin:', err);
+    }
+  }
+
+  async sendAnswerToAdmin(sdp: string): Promise<void> {
+    try {
+      await this.ensureConnection();
+      await this.hubConnection.invoke('ReceiveAnswerFromViewer', this.viewerId, sdp);
+    } catch (err) {
+      console.error('Error sending answer to admin:', err);
+    }
+  }
 }

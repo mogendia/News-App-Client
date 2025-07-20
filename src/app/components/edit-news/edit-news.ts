@@ -41,6 +41,7 @@ export class EditNewsComponent implements OnInit {
       content: ['', Validators.required],
       writtenBy: ['', Validators.required],
       imageUrl: [''],
+      imageContent: [''],
       sectionId: [1, Validators.required],
       isImportant: [false],
       isHomePage: [false]
@@ -61,6 +62,7 @@ export class EditNewsComponent implements OnInit {
           isImportant: news.isImportant,
           isHomePage: news.isHomePage,
           writtenBy: news.writtenBy,
+          imageContent : news.imageContent
         });
         this.imagePreview = news.imageUrl;
 
@@ -91,6 +93,7 @@ if (this.form.invalid) {
   const formData = new FormData();
   formData.append('title', this.form.get('title')?.value);
   formData.append('writtenBy', this.form.get('writtenBy')?.value);
+  formData.append('imageContent', this.form.get('imageContent')?.value);
   formData.append('content', this.form.get('content')?.value);
   formData.append('sectionId', this.form.get('sectionId')?.value);
   formData.append('isImportant', this.form.get('isImportant')?.value ? 'true' : 'false');
@@ -125,6 +128,5 @@ if (this.form.invalid) {
       alert('حدث خطأ أثناء إنشاء الخبر');
     }
   });
-}
-}
+}}
 }

@@ -4,7 +4,7 @@ $secondary-color: #f5f5f5;
 $text-color: #ffffff;
 $hover-color: rgba(255, 255, 255, 0.2);
 $navbar-height: 70px;
-$navbar-background: #2c3e50;
+$navbar-background: #c61d1d;
 $navbar-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 $transition-speed: 0.3s;
 $mobile-breakpoint: 992px;
@@ -37,7 +37,14 @@ $mobile-breakpoint: 992px;
       color: $text-color;
     }
   }
-
+.navbar-brand .subtext {
+  display: block;
+  font-size: 0.7em; /* Adjust size as needed */
+  color: #fff; /* Match the navbar text color, adjust if necessary */
+  margin-left: 0.5em; /* Adjust spacing from the logo and main text */
+  line-height: 1; /* Ensure proper line spacing */
+  font-weight: normal; /* Match or adjust weight as needed */
+}
   // Navigation links
   .navbar-nav {
     .nav-item {

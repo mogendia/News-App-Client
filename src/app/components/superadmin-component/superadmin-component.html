@@ -1,0 +1,21 @@
+ <div class="container">
+      <h2>Superadmin Live Stream</h2>
+      <div *ngIf="!isLive">
+        <input type="text" [(ngModel)]="streamTitle" placeholder="Enter stream title" />
+        <button (click)="startBroadcast()">Start Live</button>
+      </div>
+      <div *ngIf="isLive">
+        <button (click)="stopBroadcast()">Stop Live</button>
+        <p>Stream Title: {{ streamTitle }}</p>
+        <p>Connected Viewers: {{ userCount }}</p>
+      </div>
+      <video autoplay muted playsinline style="width: 100%; max-width: 640px;"></video>
+      <div>
+        <h3>Chat</h3>
+        <div *ngFor="let msg of messages">
+          <strong>{{ msg.user }}:</strong> {{ msg.message }}
+        </div>
+        <input type="text" [(ngModel)]="chatMessage" placeholder="Type a message" />
+        <button (click)="sendMessage()">Send</button>
+      </div>
+    </div>
