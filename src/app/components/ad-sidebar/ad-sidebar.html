@@ -1,12 +1,12 @@
 <div class="position-sticky" style="top: 100px;">
   <div class="card ad-card text-white">
     <div class="card-body text-center">
- <!-- <ng-container *ngIf="!currentAd && authService.getIsSuperAdmin()">
+ <ng-container *ngIf="!currentAd && authService.getIsSuperAdmin()">
         <p class="mb-3">لا يوجد إعلان حالي</p>
         <button class="btn btn-success btn-sm" (click)="goToAdd()">➕ إضافة إعلان</button>
-      </ng-container> -->
+      </ng-container>
 
-     
+
       <ng-container *ngIf="currentAd">
         <h5>{{ currentAd?.title }}</h5>
         <p>{{ currentAd?.description }}</p>
