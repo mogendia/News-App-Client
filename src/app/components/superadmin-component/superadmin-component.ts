@@ -76,49 +76,50 @@ export class SuperadminComponent implements OnInit, OnDestroy {
     );
   }
 
-  async startBroadcast() {
-    try {
-      this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      const videoElement = document.querySelector('video') as HTMLVideoElement;
-      videoElement.srcObject = this.stream;
+async startBroadcast() {
+  try {
+    this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    const videoElement = document.querySelector('video') as HTMLVideoElement;
+    videoElement.srcObject = this.stream;
 
-      this.liveService.startLive(this.streamTitle || 'Live Stream');
+    this.liveService.startLive(this.streamTitle || 'Live Stream');
 
-      // إرسال عرض WebRTC لكل مشاهد جديد
-      this.subscriptions.add(
-        this.liveService.userCount$.subscribe(async count => {
-          if (count > this.userCount && this.isLive) {
-            await this.liveService.sendViewerId();
-            this.subscriptions.add(
-              this.liveService.connection.on('ReceiveViewerId', async (viewerId: string) => {
-                const pc = new RTCPeerConnection(this.liveService.rtcConfiguration);
-                this.peerConnections.set(viewerId, pc);
+    // Handle new viewer connections
+    this.subscriptions.add(
+      this.liveService.userCount$.subscribe(async count => {
+        if (count > this.userCount && this.isLive) {
+          await this.liveService.sendViewerId();
+          // Place the snippet here
+          this.liveService.connection.on('ReceiveViewerId', async (viewerId: string) => {
+            console.log('Received viewerId:', viewerId);
+            const pc = new RTCPeerConnection(this.liveService.rtcConfiguration);
+            this.peerConnections.set(viewerId, pc);
 
-                this.stream!.getTracks().forEach(track => pc.addTrack(track, this.stream!));
+            this.stream!.getTracks().forEach(track => pc.addTrack(track, this.stream!));
 
-                pc.onicecandidate = (event) => {
-                  if (event.candidate) {
-                    this.liveService.sendCandidate(viewerId, JSON.stringify(event.candidate));
-                  }
-                };
+            pc.onicecandidate = (event) => {
+              if (event.candidate) {
+                this.liveService.sendCandidate(viewerId, JSON.stringify(event.candidate));
+              }
+            };
 
-                const offer = await pc.createOffer();
-                await pc.setLocalDescription(offer);
-                if (offer.sdp) {
-                  this.liveService.sendOffer(viewerId, offer.sdp);
-                } else {
-                  console.error('Offer SDP is undefined');
-                }
-              })
-            );
-          }
-        })
-      );
-    } catch (err) {
-      console.error('Error starting broadcast:', err);
-    }
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            if (offer.sdp) {
+              console.log('Sending offer to viewer:', viewerId);
+              this.liveService.sendOffer(viewerId, offer.sdp);
+            } else {
+              console.error('Offer SDP is undefined');
+            }
+          });
+        }
+        this.userCount = count; // Update userCount to prevent repeated triggers
+      })
+    );
+  } catch (err) {
+    console.error('Error starting broadcast:', err);
   }
-
+}
   stopBroadcast() {
     this.stream?.getTracks().forEach(track => track.stop());
     this.peerConnections.forEach(pc => pc.close());
@@ -133,6 +134,7 @@ export class SuperadminComponent implements OnInit, OnDestroy {
       this.chatMessage = '';
     }
   }
+
 
   ngOnDestroy() {
     this.stopBroadcast();

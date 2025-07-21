@@ -1,38 +1,41 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="container mt-4">
+      <h3 class="mb-4 d-flex justify-content-between align-items-center flex-wrap">
+        نتائج البحث:
+        <button *ngIf="authService.isAdmin()" class="btn btn-primary btn-sm mt-2 mt-md-0" [routerLink]="['/edit/new']">
+          ➕ إضافة خبر
+        </button>
+      </h3>
 
-
-  <div class="row">
-    <div class="col-md-9">
-   <div class="container mt-4">
-  <h3 class="mb-4 d-flex justify-content-between align-items-center">
-    نتائج البحث:
-    <button *ngIf="authService.isAdmin()" class="btn btn-primary btn-sm" [routerLink]="['/edit/new']">
-      ➕ إضافة خبر
-    </button>
-  </h3>
-
-  <div *ngIf="searchResults.length > 0; else noResults">
-    <div *ngFor="let news of searchResults" class="card mb-3 ">
-      <div class="card-body d-flex">
-        <img [src]="getImageUrl(news.imageUrl)" class="me-3 rounded ms-4" style="width: 150px; height: 100px; object-fit: cover;" (error)="onImageError($event)">
-        <div class="flex-grow-1 ">
-          <h5 class="text-danger">{{ news.title }}</h5>
-          <p>{{ news.content | slice:0:120 }}...</p>
-          <div class="d-flex flex-wrap gap-2 ms-4">
-            <a [routerLink]="['/news', news.id]" class="btn btn-sm btn-outline-primary ms-2 ">عرض التفاصيل</a>
-            <a *ngIf="authService.isAdmin()" [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-warning ms-2">تعديل</a>
-            <button *ngIf="authService.isAdmin()" (click)="deleteNews(news.id)" class="btn btn-sm btn-outline-danger">حذف</button>
+      <div *ngIf="searchResults.length > 0; else noResults">
+        <div *ngFor="let news of searchResults" class="card mb-3">
+          <div class="card-body d-flex flex-column flex-md-row">
+            <img
+              [src]="getImageUrl(news.imageUrl)"
+              class="rounded mb-3 mb-md-0 me-md-3 ms-md-4 mx-auto"
+              style="width: 100%; max-width: 150px; height: 100px; object-fit: cover;"
+              (error)="onImageError($event)"
+            />
+            <div class="flex-grow-1">
+              <h5 class="text-danger">{{ news.title }}</h5>
+              <p>{{ news.content | slice: 0:120 }}...</p>
+              <div class="d-flex flex-wrap gap-2">
+                <a [routerLink]="['/news', news.id]" class="btn btn-sm btn-outline-primary">عرض التفاصيل</a>
+                <a *ngIf="authService.isAdmin()" [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-warning">تعديل</a>
+                <button *ngIf="authService.isAdmin()" (click)="deleteNews(news.id)" class="btn btn-sm btn-outline-danger">حذف</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <ng-template #noResults>
+        <p class="text-center mt-5 text-muted">لا توجد نتائج مطابقة للبحث.</p>
+      </ng-template>
     </div>
   </div>
-
-  <ng-template #noResults>
-    <p class="text-center mt-5 text-muted">لا توجد نتائج مطابقة للبحث.</p>
-  </ng-template>
-</div>
-    </div>
-    <div class="col-md-3">
-      <app-ad-sidebar></app-ad-sidebar>
+  <div class="col-md-3">
+    <app-ad-sidebar></app-ad-sidebar>
   </div>
 </div>

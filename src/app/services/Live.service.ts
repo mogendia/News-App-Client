@@ -32,11 +32,14 @@ export class LiveService {
     ]
   };
 
-  startConnection(): void {
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.connectionUrl)
-      .withAutomaticReconnect()
-      .build();
+ startConnection(): void {
+  this.hubConnection = new signalR.HubConnectionBuilder()
+    .withUrl(this.connectionUrl)
+    .withAutomaticReconnect()
+    .build();
+  this.hubConnection.start()
+    .then(() => console.log('✅ SignalR Connected to', this.connectionUrl))
+    .catch(err => console.error('Error starting SignalR connection:', err));
 
     // معالجة أحداث إعادة الاتصال
     this.hubConnection.onreconnecting((error) => {
@@ -59,12 +62,12 @@ export class LiveService {
       this.viewerId = id;
     });
 
-    this.hubConnection.on('OnLiveStarted', (title: string) => {
-      this.streamStartedSource.next(title);
-      this.streamTitleSubject.next(title);
-      this.isLiveSubject.next(true);
-    });
-
+this.hubConnection.on('OnLiveStarted', (title: string) => {
+  console.log('Received OnLiveStarted with title:', title);
+  this.streamStartedSource.next(title);
+  this.streamTitleSubject.next(title);
+  this.isLiveSubject.next(true);
+});
     this.hubConnection.on('OnLiveEnded', () => {
       this.streamTitleSubject.next('');
       this.isLiveSubject.next(false);
@@ -110,7 +113,7 @@ export class LiveService {
   }
 
   // التحقق من حالة الاتصال قبل الإرسال
-  private ensureConnection(): Promise<void> {
+  public ensureConnection(): Promise<void> {
     if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
       return Promise.resolve();
     }

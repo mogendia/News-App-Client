@@ -23,15 +23,15 @@ export class ViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.liveService.startConnection();
 
-    this.subscriptions.add(
-      this.liveService.isLive$.subscribe(isLive => {
-        this.isLive = isLive;
-        if (isLive) {
-          this.startWatching();
-        }
-      })
-    );
-
+ this.subscriptions.add(
+  this.liveService.isLive$.subscribe(isLive => {
+    console.log('isLive updated:', isLive);
+    this.isLive = isLive;
+    if (isLive) {
+      this.startWatching();
+    }
+  })
+);
     this.subscriptions.add(
       this.liveService.streamTitle$.subscribe(title => {
         this.streamTitle = title;
@@ -43,13 +43,30 @@ export class ViewerComponent implements OnInit, OnDestroy {
         this.messages.push(msg);
       })
     );
+    this.checkLiveStatus(); // Initial check
+  setInterval(() => this.checkLiveStatus(), 5000);
   }
+  async checkLiveStatus() {
+  try {
+    await this.liveService.ensureConnection();
+    const isLive = await this.liveService.connection.invoke('IsLive');
+    console.log('IsLive check:', isLive);
+    this.isLive = isLive;
+    if (isLive) {
+      this.startWatching();
+    }
+  } catch (err) {
+    console.error('Error checking live status:', err);
+  }
+}
 
   async startWatching() {
     try {
       this.peerConnection = new RTCPeerConnection(this.liveService.rtcConfiguration);
-
+      console.log('Requesting viewerId');
+      await this.liveService.sendViewerId();
       this.liveService.connection.on('ReceiveOffer', async (sdp: string) => {
+        console.log('Received offer SDP:', sdp);
         if (this.peerConnection) {
           await this.peerConnection.setRemoteDescription(new RTCSessionDescription({ type: 'offer', sdp }));
           const answer = await this.peerConnection.createAnswer();

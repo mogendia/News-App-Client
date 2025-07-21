@@ -5,8 +5,8 @@
     <a class="navbar-brand d-flex align-items-center" routerLink="/">
       <img src="./favicon.ico" alt="Logo" width="40" height="40" class="me-2" />
       <div>
-        <div class="fw-bold fs-5">البوصلــــــة</div>
-        <small class="text-muted">الــبــوصــلــة.. الحقـيـقـة لها اتـجـاه</small>
+        <div class="text-white w-bold fs-5 me-4">البوصلــــــة</div>
+        <small class="text-white me-4">الــبــوصــلــة.. الحقـيـقـة لها اتـجـاه</small>
       </div>
     </a>
 
@@ -44,7 +44,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown" *ngIf="sectionList.length > 0">
           <a
-            class="nav-link dropdown-toggle"
+            class="nav-link dropdown-toggle text-white"
             href="#"
             id="sectionsDropdown"
             role="button"
@@ -79,7 +79,7 @@
         <!-- 🔧 Super Admin Menu -->
         <li class="nav-item dropdown" *ngIf="authService.getIsSuperAdmin()">
           <a
-            class="nav-link dropdown-toggle"
+            class="nav-link dropdown-toggle text-white"
             href="#"
             id="superAdminDropdown"
             role="button"
@@ -103,7 +103,7 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
           <a
-            class="nav-link dropdown-toggle"
+            class="nav-link dropdown-toggle text-white"
             href="#"
             id="authDropdown"
             role="button"

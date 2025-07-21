@@ -156,8 +156,6 @@ export class AuthService {
   }
 
   getIsSuperAdmin(): boolean {
-    console.log(this.isSuperAdmin());
-
     return this.isSuperAdmin();
   }
 }
