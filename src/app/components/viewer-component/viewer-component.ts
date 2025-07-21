@@ -26,7 +26,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
     // Subscribe to live status changes from the service
     this.subscriptions.add(
       this.liveService.isLive$.subscribe(isLive => {
-        console.log('isLive updated:', isLive);
+        console.log('Live status:', isLive);
         this.isLive = isLive;
         if (isLive) {
           this.startWatching();
@@ -52,29 +52,6 @@ export class ViewerComponent implements OnInit, OnDestroy {
         this.messages.push(msg);
       })
     );
-
-    // Initial check for live status and periodic checks
-    this.checkLiveStatus();
-    setInterval(() => this.checkLiveStatus(), 5000); // Check every 5 seconds
-  }
-
-  // Method to check the current live status from the hub
-  async checkLiveStatus() {
-    try {
-      await this.liveService.ensureConnection();
-      const isLive = await this.liveService.connection.invoke('IsLive');
-      console.log('IsLive check from hub:', isLive);
-      this.isLive = isLive; // Update local state based on hub's response
-      if (isLive && !this.peerConnection) { // Only start watching if live and not already watching
-        this.startWatching();
-      } else if (!isLive && this.peerConnection) { // If not live but still connected, close
-        this.peerConnection.close();
-        this.peerConnection = null;
-      }
-    } catch (err) {
-      console.error('Error checking live status:', err);
-      this.isLive = false; // Assume not live if there's an error
-    }
   }
 
   async startWatching() {
