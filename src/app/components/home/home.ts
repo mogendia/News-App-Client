@@ -25,12 +25,17 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private liveService: LiveService) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
   this.loadNews();
   this.liveService.startConnection();
-    this.liveService.isLive$.subscribe(isLive => {
+  this.liveService.isLive$.subscribe({
+    next: isLive => {
       this.isLive = isLive;
-    });
+      console.log('Live status:', isLive);
+    },
+    error: err => console.error('Error in isLive$:', err)
+  });
+
   window.addEventListener('breakingNewsUpdated', () => {
     this.loadNews();
   });

@@ -73,6 +73,10 @@ $desktop: 1200px;
       }
 
       h5 {
+        a {
+          text-decoration: none;
+        }
+
         @media (max-width: $mobile) {
           font-size: 1.1rem;
           margin-bottom: 0.75rem;
