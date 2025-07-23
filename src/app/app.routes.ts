@@ -13,9 +13,6 @@ import { EditSectionComponent } from './components/edit-section-component/edit-s
 import { PendingNewsComponent } from './components/pending-news-component/pending-news-component';
 import { AdminsComponent } from './components/admins-component/admins-component';
 import { RegisterSuperAdminComponent } from './components/register-super-admin-component/register-super-admin-component';
-import { SuperadminComponent } from './components/superadmin-component/superadmin-component';
-import { ViewerComponent } from './components/viewer-component/viewer-component';
-import { SuperadminDashboardComponent } from './components/superadmin-dashboard-component/superadmin-dashboard-component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,8 +31,6 @@ export const routes: Routes = [
   { path: 'admins', component: AdminsComponent, canActivate: [superAdminGuard] },
   { path: 'register-admin', component: RegisterAdminComponent, canActivate: [superAdminGuard] },
   { path: 'register-superadmin', component: RegisterSuperAdminComponent, canActivate: [superAdminGuard] },
-  { path: 'live/superadmin', component: SuperadminComponent, canActivate: [superAdminGuard] },
-  { path: 'live/viewer', component: ViewerComponent },
-  { path: 'superadmin-dashboard', component: SuperadminDashboardComponent, canActivate: [superAdminGuard] },
-  { path: '**', redirectTo: '' }
+
+
 ];

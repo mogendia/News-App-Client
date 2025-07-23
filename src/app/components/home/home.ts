@@ -5,7 +5,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { AuthService } from './../../services/auth.service';
-import { LiveService } from '../../services/Live.service';
 @Component({
  selector: 'app-home',
   standalone: true,
@@ -23,18 +22,11 @@ export class HomeComponent implements OnInit {
 
   constructor(private newsService: NewsService,
     private router: Router,
-    private liveService: LiveService) {}
+  ) {}
 
 ngOnInit(): void {
   this.loadNews();
-  this.liveService.startConnection();
-  this.liveService.isLive$.subscribe({
-    next: isLive => {
-      this.isLive = isLive;
-      console.log('Live status:', isLive);
-    },
-    error: err => console.error('Error in isLive$:', err)
-  });
+
 
   window.addEventListener('breakingNewsUpdated', () => {
     this.loadNews();

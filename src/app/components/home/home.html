@@ -1,13 +1,7 @@
 <div class="container mt-4 home-container">
   <div class="row">
     <div class="col-md-9 main-content">
-      <div class="header mb-2">
-        <button class="live-button" (click)="navigateToLiveStream()">
-          <i class="fas fa-broadcast-tower me-2"></i>
-          {{ authService.isSuperAdmin() ? 'إدارة البث المباشر' : 'مشاهدة البث المباشر' }}
-          <span class="live-indicator" *ngIf="isLive">• مباشر</span>
-        </button>
-      </div>
+
 
       <div class="admin-controls d-flex justify-content-start mb-5" *ngIf="authService.isAdmin()">
         <a [routerLink]="['/edit/new']" class="btn btn-primary me-2">Add News</a>
