@@ -30,7 +30,7 @@ export class AdSidebar implements OnInit, AfterViewChecked {
         setTimeout(() => {
           this.imageTimeoutSet = false;
           this.nextAd();
-        }, 5000);
+        }, 30000);
       }
     } else if (this.isVideo(this.currentAd.mediaUrl)) {
       const videoEl = this.adVideoRef?.nativeElement;

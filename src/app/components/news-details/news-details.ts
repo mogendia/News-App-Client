@@ -18,7 +18,7 @@ export class NewsDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private newsService: NewsService,
-    private imageUrlService: ImageUrlService
+    public img: ImageUrlService
 
   ) {}
 
@@ -34,16 +34,7 @@ loadNews(id: number): void {
     this.news = data;
     console.log('Loaded news details:', this.news);
     console.log('Image URL:', this.news.imageUrl);
-    this.imageUrlService.getFullImageUrl(this.news.imageUrl);
+    this.img.getFullImageUrl(this.news.imageUrl);
   });
 }
-
-
-  onImageError(event: any): void {
-    event.target.src = '/assets/images/default-news.jpg';
-  }
-
- getFullImageUrl(imagePath: string): string {
-    return this.imageUrlService.getFullImageUrl(imagePath);
-  }
 }

@@ -1,12 +1,30 @@
-    <section class="pending-news">
-      <h2>الأخبار المعلقة</h2>
-      <div *ngIf="pendingNews.length === 0">لا توجد أخبار معلقة</div>
-      <div *ngFor="let news of pendingNews" class="news-item">
-        <h3>{{ news.title }}</h3>
-        <p>{{ news.content | slice:0:100 }}...</p>
-        <p>القسم: {{ news.sectionName }}</p>
-        <p>الحالة: {{ news.status }}</p>
-        <button (click)="approveNews(news.id)">الموافقة</button>
-        <button (click)="rejectNews(news.id)">الرفض</button>
-      </div>
-    </section>
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <!-- إعلان في الشمال -->
+    <div class="col-12 col-md-3 order-1 order-md-1 mt-4 mt-md-0">
+      <app-ad-sidebar></app-ad-sidebar>
+    </div>
+
+    <!-- الأخبار المعلقة -->
+    <div class="col-12 col-md-9  order-2 order-md-0">
+      <section class="pending-news">
+        <h2 class="mb-4">الأخبار المعلقة</h2>
+
+        <div *ngIf="pendingNews.length === 0" class="alert alert-info">
+          لا توجد أخبار معلقة
+        </div>
+
+        <div *ngFor="let news of pendingNews" class="news-item border rounded p-3 mb-4 shadow-sm">
+          <h3>{{ news.title }}</h3>
+          <p>{{ news.content | slice: 0:100 }}...</p>
+          <p><strong>القسم:</strong> {{ news.sectionName }}</p>
+          <p><strong>الحالة:</strong> {{ news.status }}</p>
+          <div class="mt-3">
+            <button class="btn btn-success ms-2" (click)="approveNews(news.id)">الموافقة</button>
+            <button class="btn btn-danger" (click)="rejectNews(news.id)">الرفض</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {CommonModule} from '@angular/common';
 import { AuthService } from './../../services/auth.service';
+import { ImageUrlService } from '../../services/image-service';
+
 @Component({
  selector: 'app-home',
   standalone: true,
@@ -22,6 +24,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private newsService: NewsService,
     private router: Router,
+    public img: ImageUrlService
   ) {}
 
 ngOnInit(): void {
@@ -52,20 +55,11 @@ loadNews(): void {
     }
   }
 
-  onImageError(event: any): void {
-    event.target.src = '/assets/images/default-news.jpg';
-  }
 
- getFullImageUrl(imagePath: string): string {
-    if (!imagePath) return '/assets/images/default-news.jpg';
-    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-        return imagePath;
-    }
-    if (imagePath.startsWith('/assets')) {
-        return imagePath;
-    }
-    return `https://compass.runasp.net/${imagePath}`;
-}
+  handleImageError(event: any): void {
+    console.error('Image failed to load:', event.target.src);
+    event.target.src = 'favicon.ico';
+  }
 
 addBreakingNews(): void {
   if (this.breakingNewsText.trim()) {

@@ -34,13 +34,11 @@ searchNews(query: string): Observable<any[]> {
 }
 
   addNews(formData: FormData): Observable<any> {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
-
-  return this.http.post(`${this.apiUrl}`, formData, { headers });
-}
+    if (!formData.has('imageFile')) {
+      formData.append('imageUrl', 'assets/images/default-news.jpg');
+    }
+    return this.http.post(this.apiUrl, formData, { headers: this.getHeaders() });
+  }
 
 deleteNews(id: number): Observable<any> {
   const token = localStorage.getItem('token');
@@ -77,8 +75,11 @@ createNewsWithFile(formData: FormData): Observable<any> {
 }
 
   updateNewsWithFile(id: number, formData: FormData): Observable<any> {
-  return this.http.put(`${this.apiUrl}/${id}`, formData, { headers: this.getHeaders() });
-}
+    if (!formData.has('imageFile')) {
+      formData.append('imageUrl', 'assets/images/default-news.jpg');
+    }
+    return this.http.put(`${this.apiUrl}/${id}`, formData, { headers: this.getHeaders() });
+  }
 getPendingNews(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/pending`, { headers: this.getHeaders() });
   }

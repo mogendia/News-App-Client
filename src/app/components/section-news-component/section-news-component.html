@@ -1,48 +1,45 @@
-<div class="container mt-4">
+<div class="container mt-4" dir="rtl">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-12 col-md-9 mb-4">
       <h3 class="mb-4 text-center text-danger">أخبار القسم</h3>
 
-      <div *ngIf="newsList.length === 0" class="alert alert-info text-center">
+      <div *ngIf="newsList.length === 0" class="alert alert-danger text-center">
         لا توجد أخبار في هذا القسم حاليًا.
         <div *ngIf="authService.isAdmin()" class="mt-3">
-          <a routerLink="/addNews" class="btn btn-primary">➕ إضافة خبر جديد</a>
+          <a routerLink="/edit/new" class="btn btn-danger">➕ إضافة خبر جديد</a>
         </div>
       </div>
 
       <div *ngFor="let news of newsList" class="card mb-3 shadow-sm">
         <div class="card-body d-flex flex-column flex-md-row align-items-start">
-          <!-- ✅ الصورة -->
-          <a [routerLink]="['/news', news.id]" class="flex-shrink-0">
+          <a [routerLink]="['/news', news.id]" class="flex-shrink-0 mb-3 mb-md-0">
             <img
-              [src]="getImageUrl(news.imageUrl)"
-              (error)="onImageError($event)"
-              class="img-fluid rounded mx-auto mb-3 mb-md-0 ms-md-4"
+              [src]="img.getFullImageUrl(news.imageUrl)"
+              (error)="img.handleImageError($event)"
+              class="img-fluid rounded"
               style="width: 100%; max-width: 150px; height: 100px; object-fit: cover;"
               alt="صورة الخبر"
             />
           </a>
 
-          <!-- ✅ المحتوى -->
-          <div class="flex-grow-1">
-            <h5
-              class="mb-2 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2"
-              style="word-wrap: break-word; overflow-wrap: break-word;"
+          <div class="flex-grow-1 me-md-3">
+            <div
+              class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2 gap-2"
             >
               <a
                 [routerLink]="['/news', news.id]"
-                class="text-danger text-decoration-none fw-bold w-100"
-                style="word-break: break-word;"
+                class="text-danger text-decoration-none fw-bold"
+                style="word-break: break-word; font-size: 1.1rem;"
               >
                 {{ news.title }}
               </a>
 
               <!-- ✅ أزرار Admin -->
               <div *ngIf="authService.isAdmin()" class="d-flex flex-wrap gap-2">
-                <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-primary">✏️ تعديل</a>
+                <a [routerLink]="['/edit', news.id]" class="btn btn-sm btn-outline-info">✏️ تعديل</a>
                 <button class="btn btn-sm btn-outline-danger" (click)="deleteNews(news.id)">🗑️ حذف</button>
               </div>
-            </h5>
+            </div>
 
             <p class="text-muted" style="word-break: break-word;">{{ news.content }}</p>
           </div>
@@ -50,7 +47,7 @@
       </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-12 col-md-3">
       <app-ad-sidebar></app-ad-sidebar>
     </div>
   </div>

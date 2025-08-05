@@ -5,6 +5,7 @@ import { NewsService } from '../../services/News.service';
 import { RouterModule } from '@angular/router';
 import { AdSidebar } from "../ad-sidebar/ad-sidebar";
 import { AuthService } from '../../services/auth.service';
+import { ImageUrlService } from '../../services/image-service';
 
 @Component({
   selector: 'app-section-news',
@@ -19,7 +20,7 @@ export class SectionNewsComponent implements OnInit {
   authService = inject(AuthService);
 
 
-  constructor(private route: ActivatedRoute, private newsService: NewsService) {}
+  constructor(private route: ActivatedRoute, private newsService: NewsService,public img:ImageUrlService) {}
 
 
 ngOnInit(): void {
@@ -53,17 +54,5 @@ deleteNews(id: number): void {
       }
     });
   }
-}
-  getImageUrl(imagePath: string): string {
-  if (!imagePath) return '/assets/images/default-news.jpg';
-
-  if (imagePath.startsWith('http')) return imagePath;
-  if (imagePath.startsWith('/assets')) return imagePath;
-
-  return `https://compass.runasp.net/${imagePath}`;
-}
-
-onImageError(event: any) {
-  event.target.src = '/assets/images/default-news.jpg';
 }
 }

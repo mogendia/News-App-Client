@@ -1,46 +1,37 @@
-<section class="admins" style="font-family: 'Cairo', sans-serif; direction: rtl; padding: 20px;">
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <!-- إعلان الشريط الجانبي (على الشمال) -->
+    <div class="col-12 col-md-3 order-1  mt-4  order-md-1 mt-md-0">
+      <app-ad-sidebar></app-ad-sidebar>
+    </div>
 
-      <!-- Admins List -->
+    <!-- قائمة المشرفين (على اليمين) -->
+    <div class="col-12 col-md-9 order-2 order-md-0">
       <div class="admins-list">
-        <h3>قائمة المشرفين</h3>
-        <div *ngIf="admins.length === 0">لا توجد مشرفين</div>
-        <table class="table" *ngIf="admins.length > 0">
-          <thead>
-            <tr>
-              <th>البريد الإلكتروني</th>
-              <th>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let admin of admins">
-              <td>{{ admin.email }}</td>
-              <td>
-                <button class="btn btn-warning" (click)="editAdmin(admin)">تعديل</button>
-                <button class="btn btn-danger" (click)="deleteAdmin(admin.id)">حذف</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <h3 class="mb-3">قائمة المشرفين</h3>
 
-      <!-- Edit Admin Modal -->
-      <div class="modal" *ngIf="showEditModal" style="display: block;">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">تعديل المشرف</h5>
-              <button type="button" class="btn-close" (click)="closeEditModal()"></button>
-            </div>
-            <div class="modal-body">
-              <form [formGroup]="editForm" (ngSubmit)="updateAdmin()">
-                <div class="form-group">
-                  <label for="editEmail">البريد الإلكتروني</label>
-                  <input id="editEmail" formControlName="email" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">حفظ</button>
-              </form>
-            </div>
-          </div>
+        <div *ngIf="admins.length === 0" class="alert alert-info">لا توجد مشرفين</div>
+
+        <div *ngIf="admins.length > 0" class="table-responsive">
+          <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th>البريد الإلكتروني</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let admin of admins">
+                <td>{{ admin.email }}</td>
+                <td>
+                  <button class="btn btn-sm btn-warning ms-2" (click)="editAdmin(admin)">تعديل</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteAdmin(admin.id)">حذف</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</div>

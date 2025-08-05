@@ -1,3 +1,4 @@
+import { ImageUrlService } from './../../services/image-service';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router,RouterModule } from '@angular/router';
 import { NewsService } from '../../services/News.service';
@@ -18,7 +19,7 @@ export class SearchResultsComponent implements OnInit {
   newsService = inject(NewsService);
   route = inject(ActivatedRoute);
   router = inject(Router);
-
+constructor(public img:ImageUrlService) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       const query = params['query'];
@@ -36,15 +37,5 @@ export class SearchResultsComponent implements OnInit {
         this.searchResults = this.searchResults.filter((n) => n.id !== id);
       });
     }
-  }
-
-  getImageUrl(imagePath: string): string {
-    if (!imagePath) return '/assets/images/default-news.jpg';
-    if (imagePath.startsWith('http')) return imagePath;
-    return `https://compass.runasp.net/${imagePath}`;
-  }
-
-  onImageError(event: any): void {
-    event.target.src = '/assets/images/default-news.jpg';
   }
 }

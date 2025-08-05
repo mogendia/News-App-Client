@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NewsService } from '../../services/News.service';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import {AdSidebar} from '../ad-sidebar/ad-sidebar';
 
 @Component({
   selector: 'app-pending-news-component',
-  imports: [CommonModule],
+  imports: [CommonModule,AdSidebar],
   templateUrl: './pending-news-component.html',
   styleUrl: './pending-news-component.scss'
 })

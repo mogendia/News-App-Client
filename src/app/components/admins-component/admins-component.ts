@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import {AdSidebar} from '../ad-sidebar/ad-sidebar';
 
 @Component({
   selector: 'app-admins-component',
-  imports: [CommonModule,RouterModule,ReactiveFormsModule,FormsModule],
+  imports: [CommonModule,ReactiveFormsModule,FormsModule,AdSidebar],
   templateUrl: './admins-component.html',
   styleUrl: './admins-component.scss'
 })

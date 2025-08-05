@@ -101,9 +101,10 @@ if (this.form.invalid) {
 
   if (this.selectedFile) {
     formData.append('image', this.selectedFile);
-  }
-  else if (this.imagePreview) {
+  } else if (this.form.get('imageUrl')?.value) {
     formData.append('imageUrl', this.form.get('imageUrl')?.value);
+  } else {
+    formData.append('imageUrl', '/assets/images/default-news.jpg');
   }
 
   const onSuccess = () => {

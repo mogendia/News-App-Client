@@ -5,7 +5,7 @@
     <a class="navbar-brand d-flex align-items-center" routerLink="/">
       <img src="./favicon.ico" alt="Logo" width="40" height="40" class="me-2" />
       <div>
-        <div class="text-white w-bold fs-5 me-4">البوصلــــــة</div>
+        <div class="text-white fw-bold fs-5 me-4">البوصلــــــة</div>
         <small class="text-white me-4">الــبــوصــلــة.. الحقـيـقـة لها اتـجـاه</small>
       </div>
     </a>
@@ -26,20 +26,6 @@
     <!-- 🔗 Main Navbar Content -->
     <div class="collapse navbar-collapse" id="navbarContent">
 
-
-      <!-- 🔍 Centered Search Form -->
-      <form class="d-flex mx-auto w-50" (ngSubmit)="searchNews()">
-        <input
-          type="text"
-          class="form-control me-2"
-          placeholder="ابحث عن خبر"
-          [(ngModel)]="searchTerm"
-          name="searchTerm"
-        />
-        <button class="btn btn-outline-success" type="submit">
-          <i class="material-icons">search</i>
-        </button>
-      </form>
       <!-- 📌 الأقسام Dropdown -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown" *ngIf="sectionList.length > 0">
@@ -71,13 +57,13 @@
             </ng-container>
             <li><hr class="dropdown-divider" /></li>
             <li *ngIf="authService.getIsSuperAdmin()">
-              <button class="dropdown-item btn btn-sm btn-success w-100" (click)="goToAddSection()">➕ إضافة قسم جديد</button>
+              <button class="btn btn-sm btn-danger text-center w-100" (click)="goToAddSection()">➕ إضافة قسم جديد</button>
             </li>
           </ul>
         </li>
 
         <!-- 🔧 Super Admin Menu -->
-        <li class="nav-item dropdown" *ngIf="authService.getIsSuperAdmin()">
+        <li class="nav-item dropdown me-3" *ngIf="authService.getIsSuperAdmin()">
           <a
             class="nav-link dropdown-toggle text-white"
             href="#"
@@ -88,16 +74,35 @@
           >
             سوبر مشرف
           </a>
-          <ul class="dropdown-menu text-center" aria-labelledby="superAdminDropdown">
+          <ul class="dropdown-menu" aria-labelledby="superAdminDropdown">
             <li>
-              <button class="btn btn-primary mb-2 w-100" [routerLink]="['/pending-news']">الأخبار المعلقة</button>
+
+              <button class="btn btn-sm btn-outline-danger mb-2 w-75 px-4 mx-auto d-block" [routerLink]="['/pending-news']">
+              خبر معلق
+              </button>
             </li>
             <li>
-              <button class="btn btn-primary mb-2 w-100" [routerLink]="['/admins']">إدارة المشرفين</button>
+              <button class="btn btn-sm btn-outline-danger mb-2 w-75 px-4 mx-auto d-block" [routerLink]="['/admins']">
+                 المشرفين
+              </button>
             </li>
           </ul>
         </li>
       </ul>
+
+      <!-- 🔍 Centered Search Form -->
+    <form class="d-flex mx-auto my-2 my-lg-0 w-100 w-md-50 ms-5" (ngSubmit)="searchNews()">
+  <input
+    type="text"
+    class="form-control ms-2"
+    placeholder="ابحث عن خبر"
+    [(ngModel)]="searchTerm"
+    name="searchTerm"
+  />
+  <button class="btn btn-outline-light" type="submit">
+    <i class="material-icons">search</i>
+  </button>
+</form>
 
       <!-- 🔐 Auth Menu -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -114,14 +119,12 @@
           </a>
           <ul class="dropdown-menu text-center" aria-labelledby="authDropdown">
             <li *ngIf="!authService.getIsSuperAdmin()">
-              <button class="btn btn-primary mb-2 w-100" [routerLink]="['/login']">تسجيل الدخول</button>
+              <button class="btn btn-sm btn-outline-danger mb-2 w-75 mx-auto d-block" [routerLink]="['/login']">تسجيل الدخول</button>
             </li>
             <li *ngIf="authService.getIsSuperAdmin()">
-              <button class="btn btn-danger mb-2 w-100" (click)="authService.logout()">تسجيل الخروج</button>
-            </li>
-            <li *ngIf="authService.getIsSuperAdmin()">
-              <a class="btn btn-secondary mb-2 w-100" [routerLink]="['/register-admin']">انشاء حساب مشرف</a>
-              <a class="btn btn-secondary w-100" [routerLink]="['/register-superadmin']">حساب سوبر مشرف</a>
+              <button class="btn btn-sm btn-danger mb-2 w-75 mx-auto d-block" (click)="authService.logout()">تسجيل الخروج</button>
+              <a class="btn btn-sm btn-outline-danger mb-2 w-75 mx-auto d-block" [routerLink]="['/register-admin']">حساب مشرف</a>
+              <a class="btn btn-sm btn-outline-danger w-75 mx-auto d-block" [routerLink]="['/register-superadmin']">سوبر مشرف</a>
             </li>
           </ul>
         </li>
